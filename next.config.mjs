@@ -1,15 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
-  },
   reactStrictMode: true,
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: "/", destination: "/craft-lab.html" }],
+    };
+  },
 };
 
 export default nextConfig;
