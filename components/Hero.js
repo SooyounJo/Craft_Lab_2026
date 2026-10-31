@@ -27,7 +27,7 @@ export default function Hero() {
 
         <header className="nav">
           <div className="nav__links">
-            <a href="#research">Arts &<br />Fabrication</a>
+            <a className="nav__af" href="#research">Arts &<br />Fabrication</a>
             <a href="#work">Technology &<br />Selected Work</a>
           </div>
           <Logo parts={LOGO} />

@@ -58,7 +58,7 @@ export default function Research() {
               <span>one workbench.</span>
             </h2>
             <p className="rv" style={{ "--d": 120 }}>
-              The brackets in our name denote a matrix. With CR as the constant,<br />a · f · t combine differently in every project.
+              The brackets in our name denote a matrix.<br className="r-break-mo" /> With CR as the constant,<br />a · f · t combine differently in every project.
             </p>
           </div>
 

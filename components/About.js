@@ -2,6 +2,13 @@ export default function About() {
   return (
     <section className="page" id="about" data-h="710" aria-label="About">
       <div className="stage">
+        <div className="about-bg" aria-hidden="true">
+          <div className="wave">
+            <div className="wave__in">
+              <img src="/assets/img-01.webp" alt="" />
+            </div>
+          </div>
+        </div>
         <div className="about">
           <div className="divider" />
           <div className="about__row">

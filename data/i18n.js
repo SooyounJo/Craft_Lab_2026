@@ -6,7 +6,7 @@ export const KO = {
   About: "소개",
   "Three axes,": "세 개의 축,",
   "one workbench.": "하나의 작업대",
-  "The brackets in our name denote a matrix. With CR as the constant,<br>a · f · t combine differently in every project.":
+  "The brackets in our name denote a matrix.<br class=\"r-break-mo\"> With CR as the constant,<br>a · f · t combine differently in every project.":
     "이름 속 괄호는 하나의 매트릭스를 뜻합니다 CR을 상수로 두고,<br>a · f · t는 프로젝트마다 다르게 조합됩니다",
   Arts: "아트",
   "Where performing arts meet robotics. We translate choreography, directing, and stagecraft into a language of robotic expression.":

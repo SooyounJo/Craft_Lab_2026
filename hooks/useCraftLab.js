@@ -157,7 +157,30 @@ function initCraftLab() {
     cleanups.push(() => cancelAnimationFrame(moveRaf));
   }
 
+  const mobileMq = matchMedia("(max-width: 860px)");
+  const isMobile = () => mobileMq.matches;
+
+  function syncResearchLayout() {
+    axes.forEach((a, idx) => {
+      const onAxis = idx === researchIndex;
+      a.classList.toggle("open", onAxis);
+      a.setAttribute("aria-expanded", onAxis);
+    });
+  }
+
   function fit() {
+    if (isMobile()) {
+      document.documentElement.classList.add("is-mobile");
+      pages.forEach((p) => {
+        p.style.setProperty("--s", 1);
+        p.style.removeProperty("--h");
+        p.classList.add("in");
+      });
+      document.documentElement.style.setProperty("--vs", String(innerHeight));
+      document.documentElement.style.setProperty("--F", "48");
+      return;
+    }
+    document.documentElement.classList.remove("is-mobile");
     const s = document.documentElement.clientWidth / 1440;
     pages.forEach((p) => {
       p.style.setProperty("--s", s);
@@ -166,7 +189,6 @@ function initCraftLab() {
     document.documentElement.style.setProperty("--vs", (innerHeight / s).toFixed(2));
     document.documentElement.style.setProperty("--F", Math.min(210, (innerHeight / s) * 0.23).toFixed(2));
   }
-  fit();
 
   let stops = [];
   let animating = false;
@@ -212,6 +234,9 @@ function initCraftLab() {
   const axesWrap = researchPage.querySelector(".axes");
   let researchIndex = Math.max(0, axes.findIndex((a) => a.classList.contains("open")));
   let researchTimer;
+  function atResearch() {
+    return Math.abs(scrollY - researchPage.offsetTop) < 32;
+  }
   function showResearch(next, dir = 0) {
     const i = Math.max(0, Math.min(axes.length - 1, next));
     if (i === researchIndex && axes[i]?.classList.contains("open")) return false;
@@ -240,6 +265,14 @@ function initCraftLab() {
     return true;
   }
 
+  fit();
+  syncResearchLayout();
+  on(mobileMq, "change", () => {
+    fit();
+    syncResearchLayout();
+    buildStops();
+  });
+
   const workPage = document.getElementById("work");
   const workTrack = workPage.querySelector(".track");
   function slideTrack(x) {
@@ -263,8 +296,8 @@ function initCraftLab() {
   }
   function move(dir) {
     const y = scrollY;
-    if (Math.abs(y - researchPage.offsetTop) < 6 && stepResearch(dir)) return;
-    if (Math.abs(y - workPage.offsetTop) < 6) {
+    if (atResearch() && stepResearch(dir)) return;
+    if (!isMobile() && Math.abs(y - workPage.offsetTop) < 6) {
       const max = workTrack.scrollWidth - workTrack.clientWidth;
       if (dir > 0 && workTrack.scrollLeft < max - 4) {
         slideTrack(max);
@@ -286,6 +319,7 @@ function initCraftLab() {
     "wheel",
     (e) => {
       if (e.ctrlKey) return;
+      if (isMobile() && !atResearch()) return;
       const tr = e.target.closest && e.target.closest(".track");
       if (tr && Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
       e.preventDefault();
@@ -300,8 +334,44 @@ function initCraftLab() {
     { passive: false }
   );
 
+  let touchStartY = 0;
+  on(
+    window,
+    "touchstart",
+    (e) => {
+      if (!isMobile() || !e.changedTouches[0]) return;
+      touchStartY = e.changedTouches[0].clientY;
+    },
+    { passive: true }
+  );
+  on(
+    window,
+    "touchmove",
+    (e) => {
+      if (!isMobile() || !atResearch() || !e.touches[0]) return;
+      const dy = touchStartY - e.touches[0].clientY;
+      if (Math.abs(dy) < 8) return;
+      const dir = Math.sign(dy);
+      const next = researchIndex + dir;
+      if (next >= 0 && next < axes.length) e.preventDefault();
+    },
+    { passive: false }
+  );
+  on(
+    window,
+    "touchend",
+    (e) => {
+      if (!isMobile() || !atResearch() || !e.changedTouches[0]) return;
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) < 36 || animating) return;
+      lockedAt = performance.now();
+      move(Math.sign(dy));
+    },
+    { passive: true }
+  );
+
   on(window, "keydown", (e) => {
-    if (e.target.closest("input,textarea,button,.track")) return;
+    if (isMobile() || e.target.closest("input,textarea,button,.track")) return;
     const k = e.key;
     if (["ArrowDown", "PageDown", " "].includes(k) && !e.shiftKey) {
       e.preventDefault();
@@ -360,6 +430,15 @@ function initCraftLab() {
   let ticking = false;
   function tick() {
     ticking = false;
+    const aboutTop = about.offsetTop || 1;
+    const t = Math.max(0, Math.min(1, scrollY / aboutTop));
+    root.style.setProperty("--t", t.toFixed(4));
+    const researchTop = researchPage.offsetTop;
+    const ht =
+      scrollY <= aboutTop + 12
+        ? 1
+        : Math.max(0, 1 - (scrollY - aboutTop) / Math.max(64, (researchTop - aboutTop) * 0.4));
+    root.style.setProperty("--ht", ht.toFixed(4));
     if (reduce) return;
     const h = innerHeight;
     pages.forEach((p) => {
@@ -367,22 +446,30 @@ function initCraftLab() {
       if (r.bottom < -h || r.top > 2 * h) return;
       p.style.setProperty("--p", Math.max(-1, Math.min(1, r.top / h)).toFixed(4));
     });
-    const t = Math.max(0, Math.min(1, scrollY / (about.offsetTop || 1)));
-    root.style.setProperty("--t", t.toFixed(4));
     const maxY = root.scrollHeight - innerHeight;
     joinEl.classList.toggle("snapped", scrollY >= Math.min(joinEl.offsetTop, maxY) - 8);
   }
 
   const onResize = () => {
     fit();
+    syncResearchLayout();
     buildStops();
     tick();
   };
   on(window, "resize", onResize);
+  let lastScrollY = scrollY;
   on(
     window,
     "scroll",
     () => {
+      const y = scrollY;
+      const goingDown = y > lastScrollY;
+      const top = researchPage.offsetTop;
+      if (isMobile() && Math.abs(y - top) < 24) {
+        if (goingDown && lastScrollY < top - 20) showResearch(0, 1);
+        if (!goingDown && lastScrollY > top + 20) showResearch(axes.length - 1, -1);
+      }
+      lastScrollY = y;
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(tick);
@@ -400,6 +487,14 @@ function initCraftLab() {
   let tiltPending = false;
   const updateTilt = () => {
     tiltPending = false;
+    if (isMobile()) {
+      tiles.forEach((tile) => {
+        tile.style.removeProperty("--ry");
+        tile.style.removeProperty("--tz");
+        tile.style.removeProperty("--sh");
+      });
+      return;
+    }
     const mid = track.scrollLeft + track.clientWidth / 2;
     const half = track.clientWidth / 2;
     row.style.setProperty("--po", mid + "px");
@@ -421,6 +516,28 @@ function initCraftLab() {
   on(track, "scroll", queueTilt, { passive: true });
   on(window, "resize", queueTilt);
   updateTilt();
+
+  const tileIo = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("on");
+        tileIo.unobserve(e.target);
+      });
+    },
+    { threshold: 0.4, rootMargin: "0px 0px -18% 0px" }
+  );
+  function watchTiles() {
+    tiles.forEach((tile) => {
+      tile.classList.remove("on");
+      tileIo.unobserve(tile);
+      if (isMobile() && !reduce) tileIo.observe(tile);
+      else tile.classList.add("on");
+    });
+  }
+  watchTiles();
+  on(mobileMq, "change", watchTiles);
+  cleanups.push(() => tileIo.disconnect());
 
   let down = false;
   let sx = 0;
