@@ -168,15 +168,21 @@ function initCraftLab() {
     });
   }
 
+  function screenH() {
+    const vv = window.visualViewport;
+    return Math.round(Math.max(innerHeight, vv ? vv.height : 0));
+  }
+
   function fit() {
     if (isMobile()) {
       document.documentElement.classList.add("is-mobile");
+      const h = screenH();
       pages.forEach((p) => {
         p.style.setProperty("--s", 1);
-        p.style.removeProperty("--h");
+        p.style.setProperty("--h", String(h));
         p.classList.add("in");
       });
-      document.documentElement.style.setProperty("--vs", String(innerHeight));
+      document.documentElement.style.setProperty("--vs", String(h));
       document.documentElement.style.setProperty("--F", "48");
       return;
     }
@@ -457,6 +463,7 @@ function initCraftLab() {
     tick();
   };
   on(window, "resize", onResize);
+  if (window.visualViewport) on(window.visualViewport, "resize", onResize);
   let lastScrollY = scrollY;
   on(
     window,

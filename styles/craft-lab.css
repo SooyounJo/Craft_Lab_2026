@@ -41,7 +41,7 @@ a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid #f5f5f2;outline-offset:3px}
 
 /* ───────── Snap pages + scaled 1440 stage ───────── */
-@media (hover:none){html{scroll-snap-type:y proximity}}
+@media (hover:none) and (min-width:861px){html{scroll-snap-type:y proximity}}
 /* Figma 1440 frame scaled to the full viewport width, like the original layout */
 .page{position:relative;height:calc(var(--h)*var(--s)*1px);overflow:hidden;
   scroll-snap-align:start;--s:1;--h:900;--p:0}
@@ -298,7 +298,8 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   html{
     scroll-snap-type:y mandatory;
     overflow-y:scroll;
-    -webkit-overflow-scrolling:touch
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:none
   }
   .dots{display:none}
   .page,#about,#medium,#work,#join{
@@ -306,16 +307,20 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
     scroll-snap-align:start;
     scroll-snap-stop:always
   }
-  #research.page{
-    position:relative;overflow:hidden;
+  #hero,#about,#research{
+    height:100vh;height:100svh;height:100lvh;
+    min-height:100vh;min-height:100svh;min-height:100lvh;
+    overflow:hidden;
     scroll-snap-align:start;
     scroll-snap-stop:always
   }
-  #about,#medium,#work{min-height:100svh}
-  #research{min-height:100svh;height:100svh;scroll-snap-stop:always;overflow:hidden;overscroll-behavior:contain}
+  #research.page{
+    position:relative;overflow:hidden;overscroll-behavior:contain
+  }
+  #about,#medium,#work{min-height:100vh;min-height:100svh;min-height:100lvh}
   #join{scroll-snap-stop:normal}
   #join .footer{scroll-snap-align:start;scroll-snap-stop:always}
-  #hero{height:100svh;min-height:100svh;overflow:visible;z-index:1;scroll-snap-align:start}
+  #hero{z-index:1}
   .stage,#hero .stage,.hero-stage{
     position:relative;left:auto;top:auto;width:100%;height:auto;
     transform:none;min-height:0
@@ -371,7 +376,7 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
     font-size:clamp(64px,22vw,96px);line-height:.92;letter-spacing:-.04em;
     white-space:normal;word-break:keep-all;
     transform-origin:0 100%;
-    transform:translateY(calc(var(--t,0) * (220px - 100svh)))!important;
+    transform:translateY(calc(var(--t,0) * (220px - 100lvh)))!important;
     opacity:var(--ht,1);
     overflow:visible;padding-left:0
   }
@@ -381,7 +386,7 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   .headline .ch:nth-child(6){display:block;width:100%;height:0;overflow:hidden}
 
   #about{
-    z-index:2;padding:0;overflow:visible;background:transparent
+    z-index:2;padding:0;overflow:hidden;background:transparent
   }
   .about-bg{display:none}
   .about-bg .wave{
@@ -401,56 +406,63 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   html[lang="ko"] .about__text p + p{margin-top:16px}
 
   #research{padding:0}
-  #research .stage{height:100%;min-height:100%}
+  #research .stage{
+    height:100svh;height:100dvh;max-height:100%;
+    min-height:0
+  }
   .research{
     position:relative;inset:auto;width:100%;height:100%;
-    padding:28px 16px 20px;align-items:stretch;
-    display:flex;flex-direction:column
+    padding:20px 16px 16px;align-items:stretch;
+    display:flex;flex-direction:column;overflow:hidden
   }
-  .r-intro{width:100%;flex:none;flex-direction:column;padding:0 0 16px;gap:10px}
+  .r-intro{width:100%;flex:0 0 auto;flex-direction:column;padding:0 0 12px;gap:8px;position:relative;z-index:2}
   .r-intro h2{width:100%;margin:0;font-size:28px;line-height:1.15}
   .r-intro p{width:100%;font-size:14px;line-height:1.5}
   .r-break-mo{display:block}
-  .r-div,.r-div.bot{width:100%;padding:0;height:auto}
-  .r-div i{width:100%}
-  .axes{position:relative;width:100%;flex:1 1 auto;min-height:0;height:0;display:block}
-  .ax{position:absolute;left:0;top:0;width:100%;height:100%}
+  .r-div,.r-div.bot{display:none}
+  .axes{position:relative;width:100%;flex:1 1 auto;min-height:0;height:0;display:block;z-index:1}
+  .ax{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden}
   .ax .r-row{display:none}
-  .ax .r-card{
-    position:absolute;left:0;top:0;width:100%;height:100%;
-    flex-direction:column;align-items:stretch;gap:16px;
-    padding:16px;border-radius:24px
+  .ax .r-card,.ax.open .r-card,.axes[data-dir] .ax .r-card{
+    position:relative;left:auto;top:auto;inset:auto;
+    width:100%;height:100%;
+    flex-direction:column;align-items:stretch;gap:12px;
+    padding:14px;border-radius:24px;
+    transform:none;overflow:hidden
   }
-  .ax.open .r-card{opacity:1;pointer-events:auto;transform:none}
-  .ax .r-card__c{width:100%;height:auto;flex:none;gap:16px}
-  .r-card__top{gap:10px}
+  .ax.open .r-card{opacity:1;pointer-events:auto}
+  .ax .r-card__c{width:100%;height:auto;flex:none;gap:12px}
+  .r-card__top{gap:8px}
   .badge{width:44px;height:44px;font-size:15px;line-height:1}
   .r-card__top .k{font-size:14px;line-height:1.4}
   .r-card__top h3{font-size:28px;line-height:1.15;margin-top:4px}
-  .r-card__b{gap:10px}
+  .r-card__b{gap:8px}
   .r-card__b .d{font-size:14px;line-height:1.5}
   .r-card__b .t{font-size:13px;line-height:1.45}
-  .r-card__img{width:100%;flex:1 1 auto;min-height:180px;height:auto;border-radius:16px}
+  .r-card__img{width:100%;flex:1 1 auto;min-height:120px;height:auto;border-radius:16px}
   .ax .r-card__img img,.ax.open .r-card__img img{transform:none}
 
-  #medium{height:auto}
+  #medium{height:auto;min-height:100vh;min-height:100svh;min-height:100lvh}
+  #medium .stage{display:flex;flex-direction:column;min-height:100%;height:auto}
   .slide{
-    position:relative;left:auto;top:auto;width:100%;height:auto;min-height:0;
-    border-radius:0;clip-path:none
+    position:relative;left:auto;top:auto;width:100%;
+    height:auto;min-height:100vh;min-height:100svh;min-height:100lvh;
+    border-radius:0;clip-path:none;
+    display:flex;flex-direction:column
   }
   .in .slide{clip-path:none}
-  .slide__bg{position:relative;height:52vw;min-height:220px}
+  .slide__bg{position:relative;height:52vw;min-height:220px;flex:none}
   .slide__bg img{left:0;top:0;width:100%;height:100%;transform:none}
   .in .slide__bg img{transform:none}
-  .intro{position:relative;left:auto;top:auto;padding:28px 20px 0;gap:14px}
+  .intro{position:relative;left:auto;top:auto;padding:28px 20px 0;gap:14px;flex:none}
   .intro h2{font-size:28px;line-height:1.15;letter-spacing:-.04em;white-space:normal}
   .intro p{width:100%;font-size:14px;line-height:1.5}
   .slide .intro{left:auto;top:auto}
   .thumb{
     position:relative;left:auto;top:auto;
     width:148px;height:auto;aspect-ratio:240/361;
-    margin:24px auto 40px 20px;border-radius:28px;border:1px solid #fff;
-    transform:none;opacity:1
+    margin:auto 20px 28px auto;border-radius:28px;border:1px solid #fff;
+    transform:none;opacity:1;align-self:flex-end
   }
   .thumb img{width:100%;height:100%;object-fit:cover;object-position:center}
 
