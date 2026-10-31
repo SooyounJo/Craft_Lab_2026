@@ -10,7 +10,7 @@ const LOGO = [
 
 export default function Join() {
   return (
-    <section className="page" id="join" data-h="1028.44" aria-label="Join">
+    <section className="page" id="join" data-h="937.44" aria-label="Join">
       <div className="stage">
         <div className="c-bg">
           <img src="/assets/img-17.webp" alt="" />

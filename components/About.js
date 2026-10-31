@@ -20,9 +20,6 @@ export default function About() {
                 Across Arts, Fabrication, and Technology, choreographers, engineers, craftspeople, and researchers share one workbench to develop new ways of working.
               </p>
             </div>
-            <p className="about__label rv" style={{ "--d": 600 }}>
-              About
-            </p>
           </div>
         </div>
       </div>

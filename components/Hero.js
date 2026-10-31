@@ -27,8 +27,11 @@ export default function Hero() {
 
         <header className="nav">
           <div className="nav__links">
-            <a className="nav__af" href="#research">Arts &<br />Fabrication</a>
-            <a href="#work">Technology &<br />Selected Work</a>
+            <a href="#research">
+              Cultural Robotics,<br />
+              Arts, Fabrication<br />
+              &amp; Technology
+            </a>
           </div>
           <Logo parts={LOGO} />
           <div className="nav__links nav__lang" role="group" aria-label="Language">

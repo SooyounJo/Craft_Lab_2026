@@ -170,7 +170,8 @@ function initCraftLab() {
 
   function screenH() {
     const vv = window.visualViewport;
-    return Math.round(Math.max(innerHeight, vv ? vv.height : 0));
+    const vis = vv ? Math.round(vv.height) : 0;
+    return Math.round(Math.max(1, vis ? Math.min(innerHeight, vis) : innerHeight));
   }
 
   function fit() {
@@ -180,6 +181,7 @@ function initCraftLab() {
       pages.forEach((p) => {
         p.style.setProperty("--s", 1);
         p.style.setProperty("--h", String(h));
+        p.style.removeProperty("height");
         p.classList.add("in");
       });
       document.documentElement.style.setProperty("--vs", String(h));
@@ -188,12 +190,19 @@ function initCraftLab() {
     }
     document.documentElement.classList.remove("is-mobile");
     const s = document.documentElement.clientWidth / 1440;
+    const viewH = screenH();
+    const vs = viewH / s;
     pages.forEach((p) => {
-      p.style.setProperty("--s", s);
-      p.style.setProperty("--h", parseFloat(p.dataset.h));
+      p.style.setProperty("--s", String(s));
+      p.style.removeProperty("height");
+      if (p.id === "medium") {
+        p.style.setProperty("--h", vs.toFixed(2));
+      } else {
+        p.style.setProperty("--h", String(parseFloat(p.dataset.h)));
+      }
     });
-    document.documentElement.style.setProperty("--vs", (innerHeight / s).toFixed(2));
-    document.documentElement.style.setProperty("--F", Math.min(210, (innerHeight / s) * 0.23).toFixed(2));
+    document.documentElement.style.setProperty("--vs", vs.toFixed(2));
+    document.documentElement.style.setProperty("--F", Math.min(210, vs * 0.23).toFixed(2));
   }
 
   let stops = [];
@@ -303,6 +312,16 @@ function initCraftLab() {
   function move(dir) {
     const y = scrollY;
     if (atResearch() && stepResearch(dir)) return;
+    if (atResearch() && dir < 0) {
+      const prev = [...stops].reverse().find((s) => s < researchPage.offsetTop - 4);
+      if (prev !== undefined) goTo(prev);
+      return;
+    }
+    if (atResearch() && dir > 0) {
+      const after = stops.find((s) => s > researchPage.offsetTop + 4);
+      if (after !== undefined) goTo(after);
+      return;
+    }
     if (!isMobile() && Math.abs(y - workPage.offsetTop) < 6) {
       const max = workTrack.scrollWidth - workTrack.clientWidth;
       if (dir > 0 && workTrack.scrollLeft < max - 4) {
@@ -316,7 +335,9 @@ function initCraftLab() {
     }
     const next = dir > 0 ? stops.find((s) => s > y + 4) : [...stops].reverse().find((s) => s < y - 4);
     if (next === undefined) return;
-    if (Math.abs(next - researchPage.offsetTop) < 6) showResearch(dir > 0 ? 0 : axes.length - 1, dir);
+    if (Math.abs(next - researchPage.offsetTop) < 6 && !atResearch()) {
+      showResearch(dir > 0 ? 0 : axes.length - 1, dir);
+    }
     goTo(next);
   }
 
@@ -454,6 +475,12 @@ function initCraftLab() {
     });
     const maxY = root.scrollHeight - innerHeight;
     joinEl.classList.toggle("snapped", scrollY >= Math.min(joinEl.offsetTop, maxY) - 8);
+    const footer = joinEl.querySelector(".footer");
+    const ft = footer ? footer.getBoundingClientRect().top : innerHeight;
+    const dimFrom = h * 0.48;
+    const raw = Math.max(0, Math.min(1, (dimFrom - ft) / Math.max(1, dimFrom)));
+    const jd = Math.min(1, Math.pow(raw, 0.55) * 1.2);
+    joinEl.style.setProperty("--jd", reduce ? "0" : jd.toFixed(4));
   }
 
   const onResize = () => {
@@ -473,8 +500,8 @@ function initCraftLab() {
       const goingDown = y > lastScrollY;
       const top = researchPage.offsetTop;
       if (isMobile() && Math.abs(y - top) < 24) {
-        if (goingDown && lastScrollY < top - 20) showResearch(0, 1);
-        if (!goingDown && lastScrollY > top + 20) showResearch(axes.length - 1, -1);
+        if (goingDown && lastScrollY < top - 80) showResearch(0, 1);
+        if (!goingDown && lastScrollY > top + innerHeight * 0.45) showResearch(axes.length - 1, -1);
       }
       lastScrollY = y;
       if (!ticking) {

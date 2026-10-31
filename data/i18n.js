@@ -3,6 +3,8 @@ export const KO = {
     "CRAFT Lab에서 로보틱스는 엔지니어링을 넘어섭니다<br>무대 위에서, 관객과 함께, 그리고 재료를 통해 로봇은 예술과<br>만나 새로운 가능성을 만듭니다",
   "Across Arts, Fabrication, and Technology, choreographers, engineers, craftspeople, and researchers share one workbench to develop new ways of working.":
     "아트, 패브리케이션, 테크놀로지를 가로질러 안무가, 엔지니어, 공예가, 연구자가 하나의 작업대를 함께 쓰며 새로운 작업 방식을 만들어 갑니다",
+  "Cultural Robotics,<br>Arts, Fabrication<br>&amp; Technology":
+    "컬처럴 로보틱스,<br>아트, 패브리케이션<br>&amp; 테크놀로지",
   About: "소개",
   "Three axes,": "세 개의 축,",
   "one workbench.": "하나의 작업대",

@@ -89,7 +89,7 @@ a{color:inherit;text-decoration:none}
 .edgefade.l{left:-1px;background:linear-gradient(90deg,#0d0d0d,transparent)}
 .edgefade.r{right:-1px;background:linear-gradient(-90deg,#0d0d0d,transparent)}
 
-.nav{position:absolute;left:32px;top:24px;width:1344px;height:44px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.nav{position:absolute;left:32px;top:24px;width:1344px;min-height:44px;height:auto;display:flex;align-items:flex-start;justify-content:space-between;z-index:5}
 .nav__links{display:flex;gap:40px;font-weight:500;font-size:12px;line-height:1.2;color:#f5f5f2;white-space:nowrap}
 .nav__links a{transition:opacity .3s}
 .nav__links a:hover{opacity:.6}
@@ -157,7 +157,7 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 .r-text h3{font-weight:400;font-size:21.333px;line-height:27px;color:#eeeeec}
 .r-text .d{font-size:14.222px;line-height:20.622px;color:var(--mute)}
 .r-text .t{font-size:11.556px;line-height:16.756px;color:var(--mute)}
-.r-card{display:flex;align-items:center;gap:40px;width:1332px;height:480px;padding:24px;border-radius:36px;background:var(--card)}
+.r-card{display:flex;align-items:center;gap:40px;width:1266.222px;height:480px;padding:24px;border-radius:36px;background:var(--card)}
 .r-card__c{flex:1 0 0;min-width:1px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
 .r-card__top{display:flex;flex-direction:column;gap:24px}
 .r-card__top .k{font-size:20px;line-height:28px;color:var(--mute-2)}
@@ -165,10 +165,10 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 .r-card__b{display:flex;flex-direction:column;gap:20px;color:var(--mute)}
 .r-card__b .d{font-size:16px;line-height:24px}
 .r-card__b .t{font-size:12px;line-height:20px}
-.r-card__img{position:relative;flex:none;width:840px;height:100%;border-radius:20px;overflow:hidden;background:#2c2d30}
+.r-card__img{position:relative;flex:none;width:780px;height:100%;border-radius:20px;overflow:hidden;background:#2c2d30}
 .r-card__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .axes{position:relative;width:1380.444px;height:480px}
-.ax{position:absolute;left:0;top:0;width:1332px;height:480px;outline:none}
+.ax{position:absolute;left:65.778px;top:0;width:1266.222px;height:480px;outline:none}
 .ax .r-row{display:none}
 .ax .r-card{position:absolute;left:0;top:0;opacity:0;pointer-events:none;
   transform:translateY(28px);
@@ -184,11 +184,11 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 
 /* ───────── Slide · Robot as Cultural Medium ───────── */
 #medium{background:var(--bg)}
-.slide{position:absolute;left:40px;top:40px;width:1360px;height:765px;border-radius:24px;overflow:hidden;background:#1b1c1e;
+.slide{position:absolute;left:40px;top:40px;bottom:40px;width:1360px;height:auto;border-radius:24px;overflow:hidden;background:#1b1c1e;
   clip-path:inset(7% 5% 7% 5% round 24px);transition:clip-path 1.4s var(--ease)}
 .in .slide{clip-path:inset(0 0 0 0 round 24px)}
 .slide__bg{position:absolute;inset:0;overflow:hidden}
-.slide__bg img{position:absolute;height:133.79%;left:-16.94%;top:-17.93%;width:133.88%;max-width:none;
+.slide__bg img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 42%;
   transform:translateY(calc(var(--p)*90px)) scale(1.06);transition:transform 1.6s var(--ease)}
 .in .slide__bg img{transform:translateY(calc(var(--p)*90px)) scale(1)}
 .slide__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.5) 0%,rgba(0,0,0,.1) 69.935%)}
@@ -196,7 +196,7 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 .intro h2{font-weight:500;font-size:60px;line-height:1.1;letter-spacing:-2.4px;color:#f5f5f2;white-space:nowrap}
 .intro p{width:420px;font-size:15px;line-height:1.6;color:#999}
 .slide .intro{left:43px;top:50px}
-.thumb{position:absolute;left:1070px;top:353.67px;width:240px;height:361px;border:1px solid #fff;border-radius:49px;overflow:hidden;
+.thumb{position:absolute;right:50px;bottom:22px;left:auto;top:auto;width:auto;height:min(457px,calc(100% - 88px));aspect-ratio:304/457;max-width:304px;border:1px solid #fff;border-radius:62px;overflow:hidden;
   transform:translateY(80px);opacity:0;transition:transform 1.3s var(--ease) .45s,opacity 1s var(--ease) .45s}
 .in .thumb{transform:none;opacity:1}
 .thumb img{width:100%;height:100%;object-fit:cover}
@@ -234,7 +234,12 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 /* once Join has snapped into place the fade melts away; it comes back when you leave */
 @property --jf{syntax:'<length>';inherits:false;initial-value:260px}
 #join.snapped .c-bg{--jf:0px}
-.c-bg img{position:absolute;left:0;top:0;width:1440px;height:791px;object-fit:cover}
+#join{--jd:0}
+.c-bg img{position:absolute;left:50%;top:50%;width:120%;height:128%;max-width:none;object-fit:cover;object-position:center;
+  transform:translate3d(-50%,calc(-50% + var(--p,0)*72px),0);
+  will-change:transform}
+.c-bg::after{content:"";position:absolute;inset:0;background:#000;opacity:var(--jd,0);pointer-events:none}
+#join{background:#000}
 .glass{position:absolute;left:218.26px;top:97.79px;width:1003.68px;height:381.6px;border-radius:8.582px;
   background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(14.5px);backdrop-filter:blur(14.5px)}
 .c-text{position:absolute;left:243.72px;top:123.58px;width:446.4px;display:flex;flex-direction:column;gap:14.538px}
@@ -253,20 +258,20 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 .submit:hover{background:#dedbd6;color:#092f28}
 .form-note{position:absolute;left:8.6px;top:190px;font-size:11px;line-height:15px;color:rgba(244,244,242,.75)}
 
-.footer{position:absolute;left:0;top:577.44px;width:1440px;height:451px;background:#000}
+.footer{position:absolute;left:0;top:577.44px;width:1440px;height:360px;background:#000}
 .footer .logo{position:absolute;left:52px;top:29.07px;width:104.76px;height:42.85px}
 .footer .logo .a{left:0;top:0;width:42.789px;height:22.191px}
 .footer .logo .b{left:41.26px;top:0;width:22.191px;height:22.191px}
 .footer .logo .c{left:61.91px;top:0;width:22.191px;height:22.191px}
 .footer .logo .d{left:82.57px;top:0;width:22.191px;height:22.191px}
 .footer .logo .e{left:41.26px;top:20.66px;width:63.506px;height:22.191px}
-.vline{position:absolute;top:0;width:1px;height:451px;background:#dedbd6;transform-origin:top;transform:scaleY(0);transition:transform 1.4s var(--ease) .2s}
+.vline{position:absolute;top:0;width:1px;height:360px;background:#dedbd6;transform-origin:top;transform:scaleY(0);transition:transform 1.4s var(--ease) .2s}
 .in .vline{transform:none}
 .f-nav{position:absolute;left:254.19px;top:29.18px;width:377.592px;display:flex;flex-direction:column;gap:5.149px;font-size:9.783px;line-height:15.447px;color:#ebebe8}
 .f-nav .h{color:#6d6d6d;text-transform:uppercase}
 .f-nav .sp{height:15.447px}
 .f-nav a:hover{opacity:.6}
-.f-legal{position:absolute;left:253.88px;top:409.11px;display:flex;gap:28px;font-size:9.783px;line-height:15.447px;color:#ebebe8}
+.f-legal{position:absolute;left:253.88px;top:328px;display:flex;gap:28px;font-size:9.783px;line-height:15.447px;color:#8a8a8a}
 .f-big{position:absolute;left:709px;top:19.11px;width:696px;font-family:var(--gt);font-weight:300;font-size:66.937px;line-height:72.086px;color:#ebebe8;text-transform:uppercase}
 .f-big span{display:block;overflow:hidden}
 .f-big span i{display:block;font-style:normal;transform:translateY(105%);transition:transform 1.2s var(--ease);transition-delay:calc(var(--d)*1ms)}
@@ -360,14 +365,15 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   }
   .nav__links{gap:16px;font-size:13px;line-height:1.3;white-space:normal}
   .nav__links:not(.nav__lang){width:auto;justify-self:start}
-  .nav__af{display:none}
   .nav__lang{width:auto;justify-self:end;margin-left:0;gap:12px}
   .nav .logo{width:80px;height:33px;justify-self:center}
 
   .tagline{
     position:relative;left:auto;right:auto;top:auto;bottom:auto;
     translate:none;filter:none;font-size:15px;line-height:1.15;
-    white-space:normal;z-index:4;margin:0 0 168px;opacity:.8;overflow:visible
+    white-space:normal;z-index:4;
+    margin:0 0 calc(clamp(64px,22vw,96px) * 1.84 + 12px);
+    opacity:.8;overflow:visible
   }
   .tagline > span,.tagline span i{display:block;overflow:visible;transform:none}
   .headline{
@@ -376,7 +382,7 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
     font-size:clamp(64px,22vw,96px);line-height:.92;letter-spacing:-.04em;
     white-space:normal;word-break:keep-all;
     transform-origin:0 100%;
-    transform:translateY(calc(var(--t,0) * (220px - 100lvh)))!important;
+    transform:translateY(calc(var(--t,0) * (300px - 100lvh)))!important;
     opacity:var(--ht,1);
     overflow:visible;padding-left:0
   }
@@ -397,7 +403,7 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
     width:160%;height:180%;left:50%;top:50%
   }
   #research,#medium,#work,#join{background:var(--bg);z-index:2}
-  .about{position:relative;left:auto;top:auto;width:100%;padding:196px 20px 48px;gap:28px;z-index:1}
+  .about{position:relative;left:auto;top:auto;width:100%;padding:288px 20px 48px;gap:28px;z-index:1}
   .about__row{flex-direction:column;gap:16px}
   .about__text{width:100%;font-size:16px;line-height:1.45}
   .about__text p + p{margin-top:16px}
@@ -452,7 +458,7 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   }
   .in .slide{clip-path:none}
   .slide__bg{position:relative;height:52vw;min-height:220px;flex:none}
-  .slide__bg img{left:0;top:0;width:100%;height:100%;transform:none}
+  .slide__bg img{left:0;top:0;width:100%;height:100%;object-fit:cover;transform:none}
   .in .slide__bg img{transform:none}
   .intro{position:relative;left:auto;top:auto;padding:28px 20px 0;gap:14px;flex:none}
   .intro h2{font-size:28px;line-height:1.15;letter-spacing:-.04em;white-space:normal}
@@ -495,7 +501,9 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
 
   #join{height:auto}
   .c-bg{position:relative;left:auto;top:auto;width:100%;height:220px;-webkit-mask-image:none;mask-image:none}
-  .c-bg img{position:absolute;inset:0;width:100%;height:100%}
+  .c-bg img{position:absolute;left:50%;top:50%;width:120%;height:140%;object-fit:cover;
+    transform:translate(-50%,calc(-50% + var(--p,0)*36px));will-change:auto}
+  .c-bg::after{opacity:var(--jd,0)}
   .glass{display:none}
   .c-text{position:relative;left:auto;top:auto;width:100%;padding:28px 20px 8px}
   .c-text h2{width:100%;font-size:28px;line-height:1.15}

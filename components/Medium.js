@@ -1,6 +1,6 @@
 export default function Medium() {
   return (
-    <section className="page" id="medium" data-h="845" aria-label="Robot as Cultural Medium">
+    <section className="page" id="medium" data-h="740" aria-label="Robot as Cultural Medium">
       <div className="stage">
         <div className="slide">
           <div className="slide__bg">
