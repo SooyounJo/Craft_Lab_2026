@@ -55,9 +55,9 @@ export default function Join() {
           <span className="vline" style={{ left: 681.88 }} />
           <nav className="f-nav" aria-label="Footer">
             <p className="h">Explore</p>
-            <a href="#research">Arts · CR[a]</a>
-            <a href="#research">Fabrication · CR[f]</a>
-            <a href="#research">Technology · CR[t]</a>
+            <a href="#research" data-axis="0">Arts · CR[a]</a>
+            <a href="#research" data-axis="1">Fabrication · CR[f]</a>
+            <a href="#research" data-axis="2">Technology · CR[t]</a>
             <a href="#join">Careers</a>
             <span className="sp" />
             <p className="h">Lab</p>

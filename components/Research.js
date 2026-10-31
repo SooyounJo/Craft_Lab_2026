@@ -14,7 +14,6 @@ function Axis({
     <article
       className={open ? "ax rv open" : "ax rv"}
       style={{ "--d": delay }}
-      tabIndex={0}
       aria-expanded={open}
     >
       <div className="r-row" aria-hidden={open}>
@@ -50,7 +49,7 @@ function Axis({
 
 export default function Research() {
   return (
-    <section className="page" id="research" data-h="1266.78" aria-label="Research">
+    <section className="page" id="research" data-h="900" aria-label="Research">
       <div className="stage">
         <div className="research">
           <div className="r-intro">
@@ -62,12 +61,10 @@ export default function Research() {
               The brackets in our name denote a matrix. With CR as the constant,<br />a · f · t combine differently in every project.
             </p>
           </div>
-          <div className="r-div top">
-            <i />
-          </div>
 
           <div className="axes">
             <Axis
+              open
               delay={200}
               badge="01"
               code="CR[a]"
@@ -79,7 +76,6 @@ export default function Research() {
               alt="Dancers performing with robot arms"
             />
             <Axis
-              open
               delay={320}
               badge="02"
               code="CR[f]"

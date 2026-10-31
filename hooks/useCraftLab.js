@@ -179,7 +179,9 @@ function initCraftLab() {
     const out = [];
     pages.forEach((p) => {
       out.push(p.offsetTop);
-      if (p.id !== "hero" && p.offsetHeight > vh + 40) out.push(p.offsetTop + p.offsetHeight - vh);
+      if (p.id !== "hero" && p.id !== "research" && p.offsetHeight > vh + 40) {
+        out.push(p.offsetTop + p.offsetHeight - vh);
+      }
     });
     out.push(max);
     stops = [...new Set(out.map((y) => Math.round(Math.min(Math.max(y, 0), max))))].sort((a, b) => a - b);
@@ -205,6 +207,39 @@ function initCraftLab() {
     snapRaf = requestAnimationFrame(step);
   }
 
+  const researchPage = document.getElementById("research");
+  const axes = [...document.querySelectorAll(".ax")];
+  const axesWrap = researchPage.querySelector(".axes");
+  let researchIndex = Math.max(0, axes.findIndex((a) => a.classList.contains("open")));
+  let researchTimer;
+  function showResearch(next, dir = 0) {
+    const i = Math.max(0, Math.min(axes.length - 1, next));
+    if (i === researchIndex && axes[i]?.classList.contains("open")) return false;
+    if (axesWrap) axesWrap.dataset.dir = String(dir || 1);
+    researchIndex = i;
+    axes.forEach((a, idx) => {
+      const onAxis = idx === i;
+      a.classList.toggle("open", onAxis);
+      a.setAttribute("aria-expanded", onAxis);
+    });
+    return true;
+  }
+  function stepResearch(dir) {
+    const next = researchIndex + dir;
+    if (next < 0 || next >= axes.length) return false;
+    if (reduce) {
+      showResearch(next, dir);
+      return true;
+    }
+    showResearch(next, dir);
+    animating = true;
+    clearTimeout(researchTimer);
+    researchTimer = setTimeout(() => {
+      animating = false;
+    }, 700);
+    return true;
+  }
+
   const workPage = document.getElementById("work");
   const workTrack = workPage.querySelector(".track");
   function slideTrack(x) {
@@ -228,6 +263,7 @@ function initCraftLab() {
   }
   function move(dir) {
     const y = scrollY;
+    if (Math.abs(y - researchPage.offsetTop) < 6 && stepResearch(dir)) return;
     if (Math.abs(y - workPage.offsetTop) < 6) {
       const max = workTrack.scrollWidth - workTrack.clientWidth;
       if (dir > 0 && workTrack.scrollLeft < max - 4) {
@@ -240,7 +276,9 @@ function initCraftLab() {
       }
     }
     const next = dir > 0 ? stops.find((s) => s > y + 4) : [...stops].reverse().find((s) => s < y - 4);
-    if (next !== undefined) goTo(next);
+    if (next === undefined) return;
+    if (Math.abs(next - researchPage.offsetTop) < 6) showResearch(dir > 0 ? 0 : axes.length - 1, dir);
+    goTo(next);
   }
 
   on(
@@ -286,6 +324,10 @@ function initCraftLab() {
     const t = document.querySelector(a.getAttribute("href"));
     if (!t) return;
     e.preventDefault();
+    if (t.id === "research") {
+      const axis = a.dataset.axis;
+      showResearch(axis === undefined ? 0 : Number(axis), 1);
+    }
     goTo(t.offsetTop);
   });
   buildStops();
@@ -294,7 +336,10 @@ function initCraftLab() {
   pages.forEach((p) => {
     const b = document.createElement("button");
     b.setAttribute("aria-label", p.getAttribute("aria-label"));
-    b.onclick = () => goTo(p.offsetTop);
+    b.onclick = () => {
+      if (p.id === "research") showResearch(0, 1);
+      goTo(p.offsetTop);
+    };
     dots.appendChild(b);
   });
 
@@ -346,33 +391,6 @@ function initCraftLab() {
     { passive: true }
   );
   tick();
-
-  const axes = [...document.querySelectorAll(".ax")];
-  let axTimer;
-  const openAx = (el) => {
-    if (el.classList.contains("open")) return;
-    axes.forEach((a) => {
-      const onAxis = a === el;
-      a.classList.toggle("open", onAxis);
-      a.setAttribute("aria-expanded", onAxis);
-      a.querySelector(".r-row").setAttribute("aria-hidden", onAxis);
-    });
-  };
-  axes.forEach((a) => {
-    on(a, "mouseenter", () => {
-      clearTimeout(axTimer);
-      axTimer = setTimeout(() => openAx(a), 90);
-    });
-    on(a, "mouseleave", () => clearTimeout(axTimer));
-    on(a, "click", () => openAx(a));
-    on(a, "focus", () => openAx(a));
-    on(a, "keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        openAx(a);
-      }
-    });
-  });
 
   const track = document.querySelector(".track");
   const row = track.querySelector(".track__row");
@@ -474,7 +492,7 @@ function initCraftLab() {
     cancelAnimationFrame(scrambleRaf);
     cancelAnimationFrame(snapRaf);
     clearInterval(scrambleTimer);
-    clearTimeout(axTimer);
+    clearTimeout(researchTimer);
     if (dots) dots.replaceChildren();
     pages.forEach((p) => p.classList.remove("in", "seen"));
     if (joinEl) joinEl.classList.remove("snapped");

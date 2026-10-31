@@ -57,7 +57,6 @@ export default function Hero() {
           CRAFT Lab
         </h1>
       </div>
-      <div className="scrollcue" aria-hidden="true" />
     </section>
   );
 }
