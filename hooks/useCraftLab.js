@@ -625,6 +625,55 @@ function initCraftLab() {
       encodeURIComponent((d.get("message") || "") + "\n\n" + name + " <" + email + ">");
   });
 
+  const rippleEl = document.querySelector("[data-ripple]");
+  let rippleRaf = 0;
+  let rippleEnergy = 0;
+  let rippleLastY = scrollY;
+  if (rippleEl && !reduce) {
+    const filter = document.getElementById("scroll-ripple");
+    const noise = filter && filter.querySelector('[data-r="noise"]');
+    const disp = filter && filter.querySelector('[data-r="disp"]');
+    const blur = filter && filter.querySelector('[data-r="blur"]');
+    if (noise && disp && blur) {
+      const visible = () => {
+        const r = rippleEl.getBoundingClientRect();
+        return r.top < innerHeight && r.bottom > 0;
+      };
+      const loop = (now) => {
+        rippleRaf = 0;
+        rippleEnergy *= 0.955;
+        if (rippleEnergy < 0.01) {
+          rippleEnergy = 0;
+          rippleEl.classList.remove("is-rippling");
+          disp.setAttribute("scale", "0");
+          blur.setAttribute("stdDeviation", "0");
+          return;
+        }
+        const t = now / 1000;
+        const e = Math.min(1, rippleEnergy);
+        noise.setAttribute(
+          "baseFrequency",
+          (0.0035 + 0.0012 * Math.sin(t * 1.3)).toFixed(5) + " " + (0.01 + 0.003 * Math.cos(t * 1.1)).toFixed(5)
+        );
+        disp.setAttribute("scale", (e * 46).toFixed(1));
+        blur.setAttribute("stdDeviation", (e * 2.6).toFixed(2));
+        rippleRaf = requestAnimationFrame(loop);
+      };
+      const stir = (amount) => {
+        if (!visible()) return;
+        rippleEnergy = Math.min(1.2, rippleEnergy + amount);
+        rippleEl.classList.add("is-rippling");
+        if (!rippleRaf) rippleRaf = requestAnimationFrame(loop);
+      };
+      on(window, "scroll", () => {
+        const dy = Math.abs(scrollY - rippleLastY);
+        rippleLastY = scrollY;
+        stir(Math.min(0.25, dy / 400));
+      }, { passive: true });
+      on(window, "wheel", (e) => stir(Math.min(0.35, Math.abs(e.deltaY) / 500)), { passive: true });
+    }
+  }
+
   const notice = document.querySelector(".notice");
   document.querySelectorAll("img").forEach((img) => {
     const miss = () => {
@@ -642,6 +691,8 @@ function initCraftLab() {
     io.disconnect();
     cancelAnimationFrame(scrambleRaf);
     cancelAnimationFrame(snapRaf);
+    cancelAnimationFrame(rippleRaf);
+    if (rippleEl) rippleEl.classList.remove("is-rippling");
     clearInterval(scrambleTimer);
     clearTimeout(researchTimer);
     if (dots) dots.replaceChildren();

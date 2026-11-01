@@ -98,9 +98,6 @@ export default function Research() {
               alt="Robot arm in a research lab"
             />
           </div>
-          <div className="r-div bot">
-            <i />
-          </div>
         </div>
       </div>
     </section>

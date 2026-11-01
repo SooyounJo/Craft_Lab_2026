@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import Logo from "@/components/Logo";
 
 const LOGO = [
@@ -9,6 +10,32 @@ const LOGO = [
 ];
 
 export default function Hero() {
+  const vid = useRef(null);
+
+  useEffect(() => {
+    const v = vid.current;
+    if (!v) return;
+    let raf = 0;
+    const smooth = (x) => {
+      const t = Math.max(0, Math.min(1, x));
+      return t * t * (3 - 2 * t);
+    };
+    const tick = () => {
+      const d = v.duration;
+      if (d && Number.isFinite(d)) {
+        const fade = Math.min(0.9, d * 0.18);
+        const t = v.currentTime;
+        let k = 1;
+        if (t < fade) k = smooth(t / fade);
+        else if (d - t < fade) k = smooth((d - t) / fade);
+        v.style.opacity = String(k);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <section className="page" id="hero" data-h="1290" aria-label="CRAFT Lab">
       <div className="stage hero-stage">
@@ -19,9 +46,21 @@ export default function Hero() {
         </div>
         <div className="hero-img" aria-hidden="true">
           <div style={{ background: "#0d0d0d" }} />
-          <img src="/assets/img-02.webp" alt="" />
+          <div className="hero-vidwrap">
+            <video
+              ref={vid}
+              className="hero-vid"
+              src="/assets/vid/first vid.mp4"
+              muted
+              loop
+              playsInline
+              autoPlay
+              preload="auto"
+              style={{ opacity: 0 }}
+            />
+            <div className="hero-vidfade" />
+          </div>
           <div className="g1" />
-          <img className="l5" src="/assets/img-03.webp" alt="" />
           <div className="g2" />
         </div>
 

@@ -11,8 +11,15 @@ const LOGO = [
 export default function Join() {
   return (
     <section className="page" id="join" data-h="937.44" aria-label="Join">
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true" focusable="false">
+        <filter id="scroll-ripple" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+          <feTurbulence data-r="noise" type="fractalNoise" baseFrequency="0.004 0.011" numOctaves="2" seed="7" result="n" />
+          <feDisplacementMap data-r="disp" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G" result="d" />
+          <feGaussianBlur data-r="blur" in="d" stdDeviation="0" />
+        </filter>
+      </svg>
       <div className="stage">
-        <div className="c-bg">
+        <div className="c-bg" data-ripple>
           <img src="/assets/img-17.webp" alt="" />
         </div>
         <div className="glass rv" />

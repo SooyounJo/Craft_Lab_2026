@@ -3,22 +3,22 @@
 
 
 
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayXXThin.ttf") format("truetype");font-weight:100;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayXXThinItalic.ttf") format("truetype");font-weight:100;font-style:italic;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayXThin.ttf") format("truetype");font-weight:200;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayXThinItalic.ttf") format("truetype");font-weight:200;font-style:italic;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayThin.ttf") format("truetype");font-weight:250;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayThinItalic.ttf") format("truetype");font-weight:250;font-style:italic;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayLight.ttf") format("truetype");font-weight:300;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayLightItalic.ttf") format("truetype");font-weight:300;font-style:italic;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayRoman.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayRomanItalic.ttf") format("truetype");font-weight:400;font-style:italic;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayMediu.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayMediumItalic.ttf") format("truetype");font-weight:500;font-style:italic;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayBold.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayBoldItalic.ttf") format("truetype");font-weight:700;font-style:italic;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayBlack.ttf") format("truetype");font-weight:900;font-style:normal;font-display:swap}
-@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/NeueHaasDisplayBlackItalic.ttf") format("truetype");font-weight:900;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayXXThin.ttf") format("truetype");font-weight:100;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayXXThinItalic.ttf") format("truetype");font-weight:100;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayXThin.ttf") format("truetype");font-weight:200;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayXThinItalic.ttf") format("truetype");font-weight:200;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayThin.ttf") format("truetype");font-weight:250;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayThinItalic.ttf") format("truetype");font-weight:250;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayLight.ttf") format("truetype");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayLightItalic.ttf") format("truetype");font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayRoman.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayRomanItalic.ttf") format("truetype");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayMediu.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayMediumItalic.ttf") format("truetype");font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayBold.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayBoldItalic.ttf") format("truetype");font-weight:700;font-style:italic;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayBlack.ttf") format("truetype");font-weight:900;font-style:normal;font-display:swap}
+@font-face{font-family:"Neue Haas Grotesk Display Pro";src:url("/text/neuehaasdisplay/NeueHaasDisplayBlackItalic.ttf") format("truetype");font-weight:900;font-style:italic;font-display:swap}
 
 
 
@@ -80,8 +80,22 @@ a{color:inherit;text-decoration:none}
   -webkit-mask-image:linear-gradient(#000 58%,transparent 96%);mask-image:linear-gradient(#000 58%,transparent 96%);
   transform:translateY(calc(var(--p)*-180px)) scale(calc(1 + var(--p)*-.06));transform-origin:50% 30%}
 .hero-img > *{position:absolute;inset:0;width:100%;height:100%}
-.hero-img img{object-fit:cover}
-.hero-img .l5{object-fit:fill;object-position:bottom}
+.hero-img img,.hero-img .hero-vid{object-fit:cover}
+.hero-img .hero-vidwrap{
+  inset:auto;left:50%;top:0;width:112%;height:auto;
+  transform:translate(-50%,-28px)
+}
+.hero-img .hero-vid{
+  position:relative;inset:auto;left:auto;top:auto;
+  width:100%;height:auto;min-width:0;min-height:0;
+  transform:none;object-fit:cover;pointer-events:none;display:block
+}
+.hero-vidfade{
+  position:absolute;left:0;right:0;bottom:0;height:8%;
+  background:linear-gradient(to bottom,transparent 0%,rgba(13,13,13,.35) 45%,#0d0d0d 100%);
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+  pointer-events:none
+}
 .hero-img .g1{background:linear-gradient(rgba(0,0,0,.8) 0%,rgba(0,0,0,0) 45%,rgba(0,0,0,.7) 100%)}
 .hero-img .g2{background:rgba(0,0,0,.4)}
 .hero-stage .wave{left:0;top:1150px;width:1440.561px;height:1161px;transform-origin:50% 0;scale:max(1,calc((150 + var(--vs,710)) / 1161));-webkit-mask-image:linear-gradient(transparent,#000 22%);mask-image:linear-gradient(transparent,#000 22%)}
@@ -139,16 +153,12 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 /* ───────── Research ───────── */
 #research{background:var(--bg);min-height:100vh;height:max(100vh,calc(var(--h)*var(--s)*1px))}
 .research{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;padding:0 32px 0 27.556px}
-.r-intro{display:flex;align-items:flex-start;padding:80px 0 80px 65.778px;width:1380.444px}
+.r-intro{display:flex;align-items:flex-start;padding:64px 0 28px 65.778px;width:1380.444px}
 .r-intro h2{font-weight:400;width:774.222px;margin-right:-312px;font-size:42.667px;line-height:44.444px;color:#eeeeec}
 .r-intro h2 span{display:block}
 .r-intro h2 span + span{color:#969799}
 .r-intro p{width:774.222px;font-size:14.222px;line-height:19.556px;color:#eeeeec}
 .r-break-mo{display:none}
-.r-div{width:1380.444px;padding-left:65.778px}
-.r-div i{display:block;height:.889px;width:1242.667px;background:var(--line);transform-origin:left;transform:scaleX(0);transition:transform 1.4s var(--ease) .2s}
-.in .r-div i{transform:none}
-.r-div.bot{height:30.222px}
 .badge{flex:none;width:58.667px;height:58.667px;border-radius:999px;background:var(--badge);display:grid;place-items:center;
   font-size:21.333px;line-height:25.6px;color:#eeeeec;transition:background .4s,color .4s}
 .r-row{display:flex;gap:408.889px;height:240px;padding:46.222px 0 0 65.778px;width:1380.444px}
@@ -165,22 +175,26 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 .r-card__b{display:flex;flex-direction:column;gap:20px;color:var(--mute)}
 .r-card__b .d{font-size:16px;line-height:24px}
 .r-card__b .t{font-size:12px;line-height:20px}
-.r-card__img{position:relative;flex:none;width:780px;height:100%;border-radius:20px;overflow:hidden;background:#2c2d30}
-.r-card__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.axes{position:relative;width:1380.444px;height:480px}
-.ax{position:absolute;left:65.778px;top:0;width:1266.222px;height:480px;outline:none}
-.ax .r-row{display:none}
-.ax .r-card{position:absolute;left:0;top:0;opacity:0;pointer-events:none;
-  transform:translateY(28px);
-  transition:opacity .5s var(--ease),transform .75s var(--ease)}
-.axes[data-dir="-1"] .ax .r-card{transform:translateY(-28px)}
+.r-card__img{position:relative;flex:none;width:780px;height:100%;border-radius:20px;background:var(--card);
+  overflow:hidden;clip-path:inset(0 0 2px 0 round 20px);transform:translateZ(0)}
+.r-card__img img{position:absolute;left:-3%;top:-3%;width:106%;height:108%;max-width:none;object-fit:cover}
+.axes{position:relative;width:1380.444px;height:auto;display:flex;flex-direction:column;gap:0;padding-left:65.778px}
+.ax{position:relative;left:auto;top:auto;width:1266.222px;height:auto;outline:none}
+.ax .r-row{display:flex;align-items:center;gap:16px;height:auto;width:auto;margin:8px 0;padding:2px 4px 2px 24px}
+.ax .r-text{width:auto;flex-direction:row;align-items:baseline;gap:14px}
+.ax .r-text .d,.ax .r-text .t,.ax .r-text .k{display:none}
+.ax .r-text h3{font-size:20px;line-height:1.2}
+.ax:not(.open) .badge{width:40px;height:40px;font-size:14px;line-height:1}
+.ax.open .r-row{display:none;margin:0}
+.ax .r-card{position:relative;left:auto;top:auto;display:flex;height:0;padding-top:0;padding-bottom:0;overflow:hidden;opacity:0;pointer-events:none;
+  transform:translateY(28px);transition:opacity .5s var(--ease),transform .75s var(--ease),height .7s var(--ease),padding .7s var(--ease)}
+.axes[data-dir="-1"] .ax:not(.open) .r-card{transform:translateY(-28px)}
 .ax.open{z-index:1}
-.ax.open .r-card{opacity:1;pointer-events:auto;transform:none}
+.ax.open .r-card{height:480px;padding-top:24px;padding-bottom:24px;opacity:1;pointer-events:auto;transform:none}
 .ax .r-card__c > *{opacity:0;transform:translateY(14px);transition:opacity .5s var(--ease),transform .7s var(--ease)}
 .ax.open .r-card__c > *{opacity:1;transform:none;transition-delay:.18s}
 .ax.open .r-card__c > * + *{transition-delay:.28s}
-.ax .r-card__img img{transform:scale(1.08) translateY(calc(var(--p)*-40px));transition:transform 1.4s var(--ease),opacity .6s var(--ease)}
-.ax.open .r-card__img img{transform:scale(1.02) translateY(calc(var(--p)*-40px))}
+.ax .r-card__img img,.ax.open .r-card__img img{transform:none}
 
 /* ───────── Slide · Robot as Cultural Medium ───────── */
 #medium{background:var(--bg)}
@@ -188,18 +202,14 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
   clip-path:inset(7% 5% 7% 5% round 24px);transition:clip-path 1.4s var(--ease)}
 .in .slide{clip-path:inset(0 0 0 0 round 24px)}
 .slide__bg{position:absolute;inset:0;overflow:hidden}
-.slide__bg img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 42%;
-  transform:translateY(calc(var(--p)*90px)) scale(1.06);transition:transform 1.6s var(--ease)}
-.in .slide__bg img{transform:translateY(calc(var(--p)*90px)) scale(1)}
+.slide__bg img,.slide__bg .slide__vid{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 42%;
+  transform:none;pointer-events:none}
+.in .slide__bg img,.in .slide__bg .slide__vid{transform:none}
 .slide__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.5) 0%,rgba(0,0,0,.1) 69.935%)}
 .intro{position:absolute;display:flex;flex-direction:column;gap:28px}
 .intro h2{font-weight:500;font-size:60px;line-height:1.1;letter-spacing:-2.4px;color:#f5f5f2;white-space:nowrap}
 .intro p{width:420px;font-size:15px;line-height:1.6;color:#999}
 .slide .intro{left:43px;top:50px}
-.thumb{position:absolute;right:50px;bottom:22px;left:auto;top:auto;width:auto;height:min(457px,calc(100% - 88px));aspect-ratio:304/457;max-width:304px;border:1px solid #fff;border-radius:62px;overflow:hidden;
-  transform:translateY(80px);opacity:0;transition:transform 1.3s var(--ease) .45s,opacity 1s var(--ease) .45s}
-.in .thumb{transform:none;opacity:1}
-.thumb img{width:100%;height:100%;object-fit:cover}
 
 /* ───────── Panel · Selected work ───────── */
 #work{background:var(--bg)}
@@ -238,8 +248,10 @@ html[lang="ko"] .intro h2{letter-spacing:-1.2px}
 .c-bg img{position:absolute;left:50%;top:50%;width:120%;height:128%;max-width:none;object-fit:cover;object-position:center;
   transform:translate3d(-50%,calc(-50% + var(--p,0)*72px),0);
   will-change:transform}
+.c-bg.is-rippling img{filter:url(#scroll-ripple)}
 .c-bg::after{content:"";position:absolute;inset:0;background:#000;opacity:var(--jd,0);pointer-events:none}
-#join{background:#000}
+.panel::after{content:"";position:absolute;left:0;right:0;bottom:0;z-index:4;height:160px;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0%,rgba(27,28,30,.4) 38%,#1b1c1e 100%)}
 .glass{position:absolute;left:218.26px;top:97.79px;width:1003.68px;height:381.6px;border-radius:8.582px;
   background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(14.5px);backdrop-filter:blur(14.5px)}
 .c-text{position:absolute;left:243.72px;top:123.58px;width:446.4px;display:flex;flex-direction:column;gap:14.538px}
@@ -343,10 +355,20 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
     -webkit-mask-image:linear-gradient(#000 42%,rgba(0,0,0,.6) 70%,transparent 100%);
     mask-image:linear-gradient(#000 42%,rgba(0,0,0,.6) 70%,transparent 100%)
   }
-  .hero-img img,.hero-img .l5{
+  .hero-img img,.hero-img .hero-vid{
     width:100%;height:100%;
     object-fit:cover;object-position:center 30%;
     transform:scaleY(1.12);transform-origin:center top
+  }
+  .hero-img .hero-vidwrap{
+    inset:auto;left:50%;top:50%;
+    width:112%;height:auto;
+    transform:translate(-50%,-50%)
+  }
+  .hero-img .hero-vid{
+    position:relative;inset:auto;left:auto;top:auto;
+    width:100%;height:auto;min-width:0;min-height:0;
+    object-position:center;transform:none
   }
   .hero-img .g1{
     background:linear-gradient(rgba(0,0,0,.35) 0%,transparent 28%,transparent 48%,rgba(13,13,13,.7) 100%)
@@ -425,7 +447,6 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   .r-intro h2{width:100%;margin:0;font-size:28px;line-height:1.15}
   .r-intro p{width:100%;font-size:14px;line-height:1.5}
   .r-break-mo{display:block}
-  .r-div,.r-div.bot{display:none}
   .axes{position:relative;width:100%;flex:1 1 auto;min-height:0;height:0;display:block;z-index:1}
   .ax{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden}
   .ax .r-row{display:none}
@@ -458,22 +479,16 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   }
   .in .slide{clip-path:none}
   .slide__bg{position:relative;height:52vw;min-height:220px;flex:none}
-  .slide__bg img{left:0;top:0;width:100%;height:100%;object-fit:cover;transform:none}
-  .in .slide__bg img{transform:none}
+  .slide__bg img,.slide__bg .slide__vid{left:0;top:0;width:100%;height:100%;object-fit:cover;transform:none}
+  .in .slide__bg img,.in .slide__bg .slide__vid{transform:none}
   .intro{position:relative;left:auto;top:auto;padding:28px 20px 0;gap:14px;flex:none}
   .intro h2{font-size:28px;line-height:1.15;letter-spacing:-.04em;white-space:normal}
   .intro p{width:100%;font-size:14px;line-height:1.5}
   .slide .intro{left:auto;top:auto}
-  .thumb{
-    position:relative;left:auto;top:auto;
-    width:148px;height:auto;aspect-ratio:240/361;
-    margin:auto 20px 28px auto;border-radius:28px;border:1px solid #fff;
-    transform:none;opacity:1;align-self:flex-end
-  }
-  .thumb img{width:100%;height:100%;object-fit:cover;object-position:center}
 
   #work{height:auto;min-height:100svh}
   .panel{position:relative;inset:auto;border-radius:0;overflow:visible}
+  .panel::after{display:none}
   .panel .intro{left:auto;top:auto;padding:36px 20px 8px}
   .track{
     position:relative;left:auto;top:auto;width:100%;height:auto;
