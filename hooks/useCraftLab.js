@@ -15,7 +15,7 @@ function initCraftLab() {
     return (lang === "ko" && KO[str]) || str;
   }
 
-  const i18nEls = [...document.querySelectorAll(I18N_SEL)].filter((el) => KO[el.innerHTML.trim()]);
+  const i18nEls = [...document.querySelectorAll(I18N_SEL)].filter((el) => KO[el.dataset.i18nKey || el.innerHTML.trim()]);
   i18nEls.forEach((el) => {
     el.dataset.en = el.innerHTML.trim();
   });
@@ -28,7 +28,7 @@ function initCraftLab() {
     lang = next === "ko" ? "ko" : "en";
     document.documentElement.lang = lang;
     i18nEls.forEach((el) => {
-      el.innerHTML = lang === "ko" ? KO[el.dataset.en] : el.dataset.en;
+      el.innerHTML = lang === "ko" ? KO[el.dataset.i18nKey || el.dataset.en] : el.dataset.en;
     });
     phEls.forEach((el) => {
       el.placeholder = T(el.dataset.en);
@@ -284,12 +284,14 @@ function initCraftLab() {
   let animating = false;
   let lastWheel = 0;
   let snapRaf = 0;
+  let slideRaf = 0;
   let lockedAt = 0;
   function buildStops() {
     const vh = innerHeight;
     const max = document.documentElement.scrollHeight - vh;
     const out = [];
     pages.forEach((p) => {
+      if (!p.offsetHeight) return;
       out.push(p.offsetTop);
       if (p.id !== "hero" && p.id !== "research" && p.offsetHeight > vh + 40) {
         out.push(p.offsetTop + p.offsetHeight - vh);
@@ -300,13 +302,18 @@ function initCraftLab() {
   }
   function goTo(y) {
     cancelAnimationFrame(snapRaf);
+    cancelAnimationFrame(slideRaf);
+    slideRaf = 0;
+    workTrack.style.scrollBehavior = "";
     if (reduce) {
+      animating = false;
       scrollTo(0, y);
       return;
     }
     const from = scrollY;
     const d = y - from;
-    const dur = Math.min(1100, 650 + Math.abs(d) * 0.25);
+    const lateSection = Math.max(from, y) >= workPage.offsetTop - 8;
+    const dur = lateSection ? Math.min(680, 360 + Math.abs(d) * 0.18) : Math.min(1100, 650 + Math.abs(d) * 0.25);
     const t0 = performance.now();
     animating = true;
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -369,7 +376,6 @@ function initCraftLab() {
     if (!hit || !researchPage.contains(hit)) return;
     openResearch(Number(hit.dataset.axis));
   });
-
   const heroVid = document.querySelector(".hero-vid");
   if (heroVid) on(heroVid, "play", () => { if (isMobile() || pageOnScreen() !== "hero") heroVid.pause(); });
 
@@ -395,9 +401,13 @@ function initCraftLab() {
   function playVid(v) {
     if (!v || !v.paused) return;
     const pending = v.play();
-    if (pending && pending.catch) pending.catch(() => {});
+    if (pending && pending.then) pending.then(() => syncPageVideos()).catch(() => {});
   }
   function syncPageVideos() {
+    if (document.hidden) {
+      [heroVid, aboutVid, document.querySelector(".slide__vid")].forEach(v => v?.pause());
+      return;
+    }
     const id = pageOnScreen();
     const entered = id !== shownPage;
     shownPage = id;
@@ -437,7 +447,7 @@ function initCraftLab() {
   }
   function syncAboutVid(visible) {
     if (!aboutVid) return;
-    if (isMobile()) {
+    if (isMobile() || document.hidden) {
       if (aboutVidState !== "done") aboutVid.pause();
       return;
     }
@@ -447,10 +457,10 @@ function initCraftLab() {
       return;
     }
     aboutVidState = "playing";
-    const pending = aboutVid.play();
-    if (pending && pending.catch) pending.catch(() => {});
+    playVid(aboutVid);
   }
   if (aboutVid) on(aboutVid, "ended", pinAboutVid);
+  on(document, "visibilitychange", syncPageVideos);
 
   fit();
   syncResearchLayout();
@@ -464,6 +474,8 @@ function initCraftLab() {
   const workPage = document.getElementById("work");
   const workTrack = workPage.querySelector(".track");
   function slideTrack(x) {
+    cancelAnimationFrame(slideRaf);
+    cancelAnimationFrame(snapRaf);
     const from = workTrack.scrollLeft;
     const d = x - from;
     const dur = 1000;
@@ -472,15 +484,16 @@ function initCraftLab() {
     animating = true;
     workTrack.style.scrollBehavior = "auto";
     const step = (now) => {
+      slideRaf = 0;
       const t = reduce ? 1 : Math.min(1, (now - t0) / dur);
       workTrack.scrollLeft = from + d * ease(t);
-      if (t < 1) requestAnimationFrame(step);
+      if (t < 1) slideRaf = requestAnimationFrame(step);
       else {
         animating = false;
         workTrack.style.scrollBehavior = "";
       }
     };
-    requestAnimationFrame(step);
+    slideRaf = requestAnimationFrame(step);
   }
   function move(dir) {
     const y = scrollY;
@@ -627,34 +640,38 @@ function initCraftLab() {
   const about = document.getElementById("about");
   const root = document.documentElement;
   const joinEl = document.getElementById("join");
-  let ticking = false;
+  const footer = joinEl.querySelector(".footer");
+  const setStyle = (node, name, value) => {
+    if (node.style.getPropertyValue(name) !== value) node.style.setProperty(name, value);
+  };
+  let scrollRaf = 0;
   function tick() {
-    ticking = false;
+    scrollRaf = 0;
     syncPageVideos();
-    const aboutTop = about.offsetTop || 1;
-    const t = Math.max(0, Math.min(1, scrollY / aboutTop));
-    root.style.setProperty("--t", t.toFixed(4));
-    const researchTop = researchPage.offsetTop;
-    const ht =
-      scrollY <= aboutTop + 12
-        ? 1
-        : Math.max(0, 1 - (scrollY - aboutTop) / Math.max(64, (researchTop - aboutTop) * 0.4));
-    root.style.setProperty("--ht", ht.toFixed(4));
-    if (reduce) return;
+    // Finish geometry reads before changing styles; no read/write/read layout cycles.
+    const y = scrollY;
     const h = innerHeight;
-    pages.forEach((p) => {
-      const r = p.getBoundingClientRect();
-      if (r.bottom < -h || r.top > 2 * h) return;
-      p.style.setProperty("--p", Math.max(-1, Math.min(1, r.top / h)).toFixed(4));
-    });
-    const maxY = root.scrollHeight - innerHeight;
-    joinEl.classList.toggle("snapped", scrollY >= Math.min(joinEl.offsetTop, maxY) - 8);
-    const footer = joinEl.querySelector(".footer");
-    const ft = footer ? footer.getBoundingClientRect().top : innerHeight;
+    const aboutTop = about.offsetTop || 1;
+    const researchTop = researchPage.offsetTop;
+    const t = Math.max(0, Math.min(1, y / aboutTop));
+    const ht =
+      y <= aboutTop + 12
+        ? 1
+        : Math.max(0, 1 - (y - aboutTop) / Math.max(64, (researchTop - aboutTop) * 0.4));
+    const rects = reduce ? [] : pages.map(p => [p, p.getBoundingClientRect()]);
+    const maxY = root.scrollHeight - h;
+    const snapped = y >= Math.min(joinEl.offsetTop, maxY) - 8;
+    const ft = footer ? footer.getBoundingClientRect().top : h;
     const dimFrom = h * 0.48;
     const raw = Math.max(0, Math.min(1, (dimFrom - ft) / Math.max(1, dimFrom)));
     const jd = Math.min(1, Math.pow(raw, 0.55) * 1.2);
-    joinEl.style.setProperty("--jd", reduce ? "0" : jd.toFixed(4));
+    setStyle(root, "--t", t.toFixed(4));
+    setStyle(root, "--ht", ht.toFixed(4));
+    rects.forEach(([p, r]) => {
+      if (r.bottom >= -h && r.top <= 2 * h) setStyle(p, "--p", Math.max(-1, Math.min(1, r.top / h)).toFixed(4));
+    });
+    joinEl.classList.toggle("snapped", snapped);
+    setStyle(joinEl, "--jd", reduce ? "0" : jd.toFixed(4));
   }
 
   const onResize = () => {
@@ -672,16 +689,15 @@ function initCraftLab() {
     () => {
       const y = scrollY;
       const goingDown = y > lastScrollY;
-      const top = researchPage.offsetTop;
-      if (isMobile() && Math.abs(y - top) < 24) {
-        if (goingDown && lastScrollY < top - 80) showResearch(0, 1);
-        if (!goingDown && lastScrollY > top + innerHeight * 0.45) showResearch(axes.length - 1, -1);
+      if (isMobile()) {
+        const top = researchPage.offsetTop;
+        if (Math.abs(y - top) < 24) {
+          if (goingDown && lastScrollY < top - 80) showResearch(0, 1);
+          if (!goingDown && lastScrollY > top + innerHeight * 0.45) showResearch(axes.length - 1, -1);
+        }
       }
       lastScrollY = y;
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(tick);
-      }
+      if (!scrollRaf) scrollRaf = requestAnimationFrame(tick);
     },
     { passive: true }
   );
@@ -692,9 +708,9 @@ function initCraftLab() {
   const tiles = [...row.querySelectorAll(".tile")];
   const MAX = 22;
   const DEPTH = 70;
-  let tiltPending = false;
+  let tiltRaf = 0;
   const updateTilt = () => {
-    tiltPending = false;
+    tiltRaf = 0;
     if (isMobile()) {
       tiles.forEach((tile) => {
         tile.style.removeProperty("--ry");
@@ -705,21 +721,19 @@ function initCraftLab() {
     }
     const mid = track.scrollLeft + track.clientWidth / 2;
     const half = track.clientWidth / 2;
-    row.style.setProperty("--po", mid + "px");
-    tiles.forEach((tile) => {
-      const c = tile.offsetLeft + tile.offsetWidth / 2;
+    const centers = tiles.map(tile => tile.offsetLeft + tile.offsetWidth / 2);
+    setStyle(row, "--po", mid + "px");
+    tiles.forEach((tile, index) => {
+      const c = centers[index];
       const d = Math.max(-1.4, Math.min(1.4, (c - mid) / half));
-      tile.style.setProperty("--ry", (reduce ? 0 : -d * MAX).toFixed(2) + "deg");
-      tile.style.setProperty("--tz", (reduce ? 0 : -Math.abs(d) * DEPTH).toFixed(1) + "px");
-      tile.style.setProperty("--sh", Math.min(1, Math.abs(d)).toFixed(3));
-      tile.style.setProperty("--sd", d > 0 ? "270deg" : "90deg");
+      setStyle(tile, "--ry", (reduce ? 0 : -d * MAX).toFixed(2) + "deg");
+      setStyle(tile, "--tz", (reduce ? 0 : -Math.abs(d) * DEPTH).toFixed(1) + "px");
+      setStyle(tile, "--sh", Math.min(1, Math.abs(d)).toFixed(3));
+      setStyle(tile, "--sd", d > 0 ? "270deg" : "90deg");
     });
   };
   const queueTilt = () => {
-    if (!tiltPending) {
-      tiltPending = true;
-      requestAnimationFrame(updateTilt);
-    }
+    if (!tiltRaf) tiltRaf = requestAnimationFrame(updateTilt);
   };
   on(track, "scroll", queueTilt, { passive: true });
   on(window, "resize", queueTilt);
@@ -753,6 +767,12 @@ function initCraftLab() {
   let dragScale = 1;
   on(track, "pointerdown", (e) => {
     if (e.pointerType !== "mouse") return;
+    if (slideRaf) {
+      cancelAnimationFrame(slideRaf);
+      slideRaf = 0;
+      workTrack.style.scrollBehavior = "";
+      animating = false;
+    }
     down = true;
     sx = e.clientX;
     sl = track.scrollLeft;
@@ -874,10 +894,16 @@ function initCraftLab() {
     io.disconnect();
     cancelAnimationFrame(scrambleRaf);
     cancelAnimationFrame(snapRaf);
+    cancelAnimationFrame(slideRaf);
+    cancelAnimationFrame(scrollRaf);
+    cancelAnimationFrame(tiltRaf);
     cancelAnimationFrame(rippleRaf);
     if (rippleEl) rippleEl.classList.remove("is-rippling");
     clearInterval(scrambleTimer);
     clearTimeout(researchTimer);
+    clearTimeout(toastTimer);
+    document.querySelector(".toast")?.remove();
+    document.querySelectorAll("video").forEach(v => v.pause());
     if (dots) dots.replaceChildren();
     pages.forEach((p) => p.classList.remove("in", "seen"));
     if (joinEl) joinEl.classList.remove("snapped");
