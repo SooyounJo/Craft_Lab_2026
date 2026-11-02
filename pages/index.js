@@ -24,10 +24,6 @@ export default function Home() {
       <Medium />
       <Work />
       <Join />
-      <div className="notice" role="status" hidden>
-        이미지 에셋이 아직 없어요. 같은 폴더에서 <code>download-assets.sh</code>를 실행하면 Figma 이미지가{" "}
-        <code>assets/</code>에 채워집니다.
-      </div>
     </>
   );
 }
