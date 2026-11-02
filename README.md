@@ -1,40 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# CRAFT Lab 공개용 소스
 
-## Getting Started
+GitHub `SooyounJo/Craft_Lab_2026`에 반영하는 공개용 Next.js 프로젝트입니다.
+최신 영상과 모바일 변경, 확정한 PC 레이아웃, PC·모바일 로고 정렬, 소개 문단의 On stage 줄바꿈을 포함합니다.
+편집툴, `/edit` 경로, 편집 설정, 전용 호스팅 ID는 포함하지 않습니다.
 
-First, run the development server:
+## 실행
 
-```bash
-npm run dev
-# or
+Node.js 24와 Yarn 1.22로 확인한 프로젝트입니다.
+
+```sh
+corepack enable
+yarn install --frozen-lockfile
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저에서 http://localhost:3000 을 엽니다.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 배포
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+일반 Next.js 배포(Vercel 또는 Node 서버):
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+```sh
+yarn build
+yarn start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+정적 파일 배포:
 
-## Learn More
+```sh
+yarn build:static
+```
 
-To learn more about Next.js, take a look at the following resources:
+생성되는 `out/` 폴더를 웹호스팅에 올립니다. 도메인 루트(`/`) 배포 기준입니다.
+GitHub에 소스를 올리는 것만으로 웹사이트가 배포되지는 않으며, 기존 호스팅 연결 또는 별도 배포가 필요합니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+## 기존 저장소에 반영
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. 압축 안 `Craft_Lab_2026/` 폴더의 내용을 기존 저장소 루트에 반영합니다. 같은 이름의 폴더를 한 겹 더 만들지 않습니다.
+2. `.git` 폴더는 기존 것을 유지합니다. 이 패키지에는 Git 이력이 없습니다.
+3. `REMOVED-FILES.txt`는 기존 원본에서 빠진 파일 목록입니다. 옛 영상과 미사용 파일이 남지 않도록 해당 목록을 확인합니다.
+4. 변경 파일을 확인한 뒤 커밋하고 업로드합니다. `node_modules/`, `.next/`, `out/`, 비밀 설정 파일은 올리지 않습니다.
 
-## Deploy on Vercel
+## 성능 최적화
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 배경 영상 3개를 최대 1920px 너비 H.264로 압축했습니다. 오디오 트랙을 제거하고 빠른 재생 시작을 위한 메타데이터를 파일 앞에 배치했습니다.
+- 영상은 해당 섹션에 진입할 때 로드·재생하며 화면 밖이나 비활성 탭에서는 정지합니다. 모바일에서 숨긴 배경 영상은 미리 다운로드하지 않습니다.
+- 미사용 영상·이미지·폰트·옛 HTML 및 편집툴 파일을 제외했습니다.
+- 05 카드 이동(1초), 06 물결 효과, 영상 로고 애니메이션과 레이아웃은 유지했습니다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+현재 모바일에서는 원본 수정대로 04 섹션이 숨겨지고, JOIN 폼은 Coming soon 안내를 표시합니다.
