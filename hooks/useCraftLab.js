@@ -71,12 +71,12 @@ function initCraftLab() {
     const CHARS = ".:";
     const SWAP = 70;
     const RADIUS = 100;
-    const groups = [...document.querySelectorAll(".tagline, .headline, .logo-mark")];
+    const groups = [...document.querySelectorAll(".tagline, .headline")];
     const cells = [...document.querySelectorAll(".tagline .ch, .headline .ch")];
     const blank = (ch) => /\s/.test(ch);
     const pick = () => CHARS[Math.floor(Math.random() * CHARS.length)];
     const hold = (it) => 250 + 1000 * (0.15 + DURATION * (0.75 * (it.idx / it.len) + 0.25 * Math.random()));
-    const textItems = cells.map((c) => ({
+    const items = cells.map((c) => ({
       cell: c,
       gl: c.lastChild,
       ch: c.firstChild.textContent,
@@ -84,17 +84,6 @@ function initCraftLab() {
       idx: [...c.parentElement.children].indexOf(c),
       len: c.parentElement.children.length,
     }));
-    const logoItems = [...document.querySelectorAll(".logo-ch")].map((c, i) => ({
-      cell: c,
-      gl: c.querySelector(".logo-gl"),
-      letter: c.querySelector(".logo-letter"),
-      ch: c.dataset.ch,
-      until: 0,
-      idx: i % 8,
-      len: 8,
-      logo: true,
-    }));
-    const items = textItems.concat(logoItems);
     let lastSwap = 0;
     const frame = (now) => {
       scrambleRaf = 0;
@@ -105,21 +94,11 @@ function initCraftLab() {
         if (!it.until || blank(it.ch)) return;
         if (now >= it.until) {
           it.until = 0;
-          if (it.logo) {
-            it.gl.textContent = "";
-            it.letter.style.opacity = "";
-          } else {
-            it.gl.textContent = it.ch;
-          }
+          it.gl.textContent = it.ch;
           return;
         }
         busy = true;
-        if (it.logo) {
-          it.letter.style.opacity = "0";
-          if (swap || !it.gl.textContent) it.gl.textContent = ".";
-        } else if (swap || it.gl.textContent === it.ch) {
-          it.gl.textContent = pick();
-        }
+        if (swap || it.gl.textContent === it.ch) it.gl.textContent = pick();
       });
       if (busy) scrambleRaf = requestAnimationFrame(frame);
     };
@@ -129,36 +108,12 @@ function initCraftLab() {
     const scrambleFor = (it, ms) => {
       if (blank(it.ch)) return;
       it.until = Math.max(it.until, performance.now() + ms);
-      if (it.logo) {
-        if (!it.gl.textContent) {
-          it.letter.style.opacity = "0";
-          it.gl.textContent = ".";
-        }
-      } else if (it.gl.textContent === it.ch) {
-        it.gl.textContent = pick();
-      }
+      if (it.gl.textContent === it.ch) it.gl.textContent = pick();
     };
 
-    textItems.forEach((it) => scrambleFor(it, hold(it)));
+    items.forEach((it) => scrambleFor(it, hold(it)));
     const go = () => wake();
     (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(go, go);
-
-    const seenLogo = new WeakSet();
-    const playLogo = (mark) => {
-      logoItems.forEach((it) => {
-        if (mark.contains(it.cell)) scrambleFor(it, hold(it));
-      });
-      wake();
-    };
-    const logoIo = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting || seenLogo.has(entry.target)) return;
-        seenLogo.add(entry.target);
-        playLogo(entry.target);
-      });
-    }, { threshold: 0.5 });
-    document.querySelectorAll(".logo-mark").forEach((mark) => logoIo.observe(mark));
-    cleanups.push(() => logoIo.disconnect());
 
     scrambleTimer = setInterval(() => {
       if (document.hidden) return;
@@ -218,7 +173,9 @@ function initCraftLab() {
   function screenH() {
     const vv = window.visualViewport;
     const vis = vv ? Math.round(vv.height) : 0;
-    return Math.round(Math.max(1, vis ? Math.min(innerHeight, vis) : innerHeight));
+    const inner = Math.round(Math.max(1, vis ? Math.min(innerHeight, vis) : innerHeight));
+    const client = document.documentElement.clientHeight || inner;
+    return Math.min(inner, client);
   }
 
   function fit() {
@@ -229,27 +186,98 @@ function initCraftLab() {
         p.style.setProperty("--s", 1);
         p.style.setProperty("--h", String(h));
         p.style.removeProperty("height");
+        p.style.removeProperty("min-height");
         p.classList.add("in");
       });
+      const research = document.getElementById("research");
+      research.style.removeProperty("--card-h");
+      research.style.removeProperty("--rf");
+      research.style.removeProperty("--cf");
       document.documentElement.style.setProperty("--vs", String(h));
       document.documentElement.style.setProperty("--F", "48");
+      document.documentElement.style.setProperty("--af", "1");
+      const heroVid = document.querySelector(".hero-vid");
+      if (heroVid) heroVid.pause();
+      const wave = document.querySelector(".hero-stage .wave");
+      if (wave) {
+        wave.style.removeProperty("--seam");
+        wave.style.removeProperty("--blend");
+      }
+      syncPageVideos();
       return;
     }
     document.documentElement.classList.remove("is-mobile");
     const s = document.documentElement.clientWidth / 1440;
     const viewH = screenH();
     const vs = viewH / s;
+    const aboutDesign = parseFloat(document.getElementById("about").dataset.h) || 710;
+    const aboutFit = Math.min(1, vs / aboutDesign);
+    document.documentElement.style.setProperty("--af", aboutFit.toFixed(4));
     pages.forEach((p) => {
       p.style.setProperty("--s", String(s));
       p.style.removeProperty("height");
+      p.style.removeProperty("min-height");
       if (p.id === "medium") {
         p.style.setProperty("--h", vs.toFixed(2));
+      } else if (p.id === "about") {
+        p.style.setProperty("--h", (aboutDesign * aboutFit).toFixed(2));
+        if (aboutFit < 1) {
+          p.style.height = Math.floor(viewH) + "px";
+          p.style.minHeight = "0px";
+        }
       } else {
         p.style.setProperty("--h", String(parseFloat(p.dataset.h)));
       }
     });
     document.documentElement.style.setProperty("--vs", vs.toFixed(2));
     document.documentElement.style.setProperty("--F", Math.min(210, vs * 0.23).toFixed(2));
+    fitResearchCard(s, viewH);
+    fitAboutSeam();
+    syncPageVideos();
+  }
+
+  function fitResearchCard(s, viewH) {
+    const research = document.getElementById("research");
+    const intro = research.querySelector(".r-intro");
+    const rows = [...research.querySelectorAll(".ax:not(.open) .r-row")];
+    if (!intro) return;
+    research.style.setProperty("--rf", "1");
+    research.style.setProperty("--cf", "1");
+    research.style.setProperty("--card-h", "480px");
+    if (intro.offsetHeight < 40) return;
+
+    const rowsH = () => rows.reduce((sum, row) => {
+      const cs = getComputedStyle(row);
+      return sum + row.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+    }, 0);
+    const avail = viewH / s - 24;
+    let chrome = intro.offsetHeight + rowsH();
+    let cardH = 480;
+    if (chrome + cardH <= avail) return;
+
+    cardH = avail - chrome;
+    if (cardH < 400) {
+      const rf = Math.min(1, Math.max(0.55, (avail - 400) / Math.max(chrome, 1)));
+      research.style.setProperty("--rf", rf.toFixed(4));
+      chrome = intro.offsetHeight + rowsH();
+      cardH = avail - chrome;
+    }
+    cardH = Math.min(480, Math.max(120, cardH));
+    const cf = Math.min(1, Math.max(0.5, cardH / 480));
+    research.style.setProperty("--cf", cf.toFixed(4));
+    research.style.setProperty("--card-h", cardH.toFixed(2) + "px");
+  }
+
+  function fitAboutSeam() {
+    const wave = document.querySelector(".hero-stage .wave");
+    const research = document.getElementById("research");
+    if (!wave || !research) return;
+    const rect = wave.getBoundingClientRect();
+    const visualSeam = rect.bottom + scrollY - research.offsetTop;
+    const visualH = rect.height || 1;
+    const toLayout = (wave.offsetHeight || visualH) / visualH;
+    wave.style.setProperty("--seam", Math.max(0, visualSeam * toLayout).toFixed(1) + "px");
+    wave.style.setProperty("--blend", (150 * toLayout).toFixed(1) + "px");
   }
 
   let stops = [];
@@ -342,12 +370,95 @@ function initCraftLab() {
     openResearch(Number(hit.dataset.axis));
   });
 
+  const heroVid = document.querySelector(".hero-vid");
+  if (heroVid) on(heroVid, "play", () => { if (isMobile() || pageOnScreen() !== "hero") heroVid.pause(); });
+
+  const aboutVid = document.querySelector(".about-vid");
+  let aboutVidState = "idle";
+  let shownPage = "";
+  function pageOnScreen() {
+    const h = innerHeight || 1;
+    let best = pages[0];
+    let bestRatio = -1;
+    pages.forEach((p) => {
+      if (getComputedStyle(p).display === "none") return;
+      const r = p.getBoundingClientRect();
+      const visible = Math.min(r.bottom, h) - Math.max(r.top, 0);
+      const ratio = visible / Math.min(Math.max(r.height, 1), h);
+      if (ratio > bestRatio) {
+        bestRatio = ratio;
+        best = p;
+      }
+    });
+    return best ? best.id : "hero";
+  }
+  function playVid(v) {
+    if (!v || !v.paused) return;
+    const pending = v.play();
+    if (pending && pending.catch) pending.catch(() => {});
+  }
+  function syncPageVideos() {
+    const id = pageOnScreen();
+    const entered = id !== shownPage;
+    shownPage = id;
+    if (heroVid) {
+      if (!isMobile() && id === "hero") playVid(heroVid);
+      else heroVid.pause();
+    }
+    syncAboutVid(id === "about");
+    const slide = document.querySelector(".slide__vid");
+    if (slide) {
+      if (!isMobile() && id === "medium") {
+        if (entered) {
+          try { slide.currentTime = 0; } catch (e) {}
+        }
+        playVid(slide);
+      } else {
+        slide.pause();
+      }
+    }
+  }
+  function pinAboutVid() {
+    if (!aboutVid || aboutVidState === "done") return;
+    aboutVidState = "done";
+    aboutVid.pause();
+    const end = aboutVid.duration;
+    if (end && isFinite(end) && aboutVid.currentTime < 0.2) {
+      aboutVid.currentTime = Math.max(0, end - 0.08);
+    }
+  }
+  function aboutInView() {
+    const about = document.getElementById("about");
+    if (!about) return false;
+    const r = about.getBoundingClientRect();
+    const h = innerHeight || 1;
+    const visible = Math.min(r.bottom, h) - Math.max(r.top, 0);
+    return visible > 0 && visible / Math.min(r.height, h) >= 0.45;
+  }
+  function syncAboutVid(visible) {
+    if (!aboutVid) return;
+    if (isMobile()) {
+      if (aboutVidState !== "done") aboutVid.pause();
+      return;
+    }
+    if (aboutVidState === "done") return;
+    if (!visible) {
+      if (aboutVidState === "playing") aboutVid.pause();
+      return;
+    }
+    aboutVidState = "playing";
+    const pending = aboutVid.play();
+    if (pending && pending.catch) pending.catch(() => {});
+  }
+  if (aboutVid) on(aboutVid, "ended", pinAboutVid);
+
   fit();
   syncResearchLayout();
   on(mobileMq, "change", () => {
     fit();
     syncResearchLayout();
     buildStops();
+    syncAboutVid(aboutInView());
   });
 
   const workPage = document.getElementById("work");
@@ -519,6 +630,7 @@ function initCraftLab() {
   let ticking = false;
   function tick() {
     ticking = false;
+    syncPageVideos();
     const aboutTop = about.offsetTop || 1;
     const t = Math.max(0, Math.min(1, scrollY / aboutTop));
     root.style.setProperty("--t", t.toFixed(4));
@@ -669,22 +781,31 @@ function initCraftLab() {
   });
 
   const form = document.querySelector(".form");
-  const note = form.querySelector(".form-note");
+  let toastTimer = 0;
+  const showSoon = () => {
+    let toast = document.querySelector(".toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.className = "toast";
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
+      document.body.appendChild(toast);
+    }
+    toast.textContent = "Coming soon";
+    toast.classList.remove("is-on");
+    void toast.offsetWidth;
+    toast.classList.add("is-on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("is-on"), 1600);
+  };
+  on(form, "pointerdown", (e) => {
+    if (!e.target.closest(".field")) return;
+    e.preventDefault();
+    showSoon();
+  });
   on(form, "submit", (e) => {
     e.preventDefault();
-    const d = new FormData(form);
-    const name = d.get("name").trim();
-    const email = d.get("email").trim();
-    if (!name || !email || !form.email.checkValidity()) {
-      note.textContent = T("Add your name and a valid email to send.");
-      return;
-    }
-    note.textContent = T("Opening your email app…");
-    location.href =
-      "mailto:hello@craftlab.kr?subject=" +
-      encodeURIComponent("Join CRAFT Lab — " + name) +
-      "&body=" +
-      encodeURIComponent((d.get("message") || "") + "\n\n" + name + " <" + email + ">");
+    showSoon();
   });
 
   const rippleEl = document.querySelector("[data-ripple]");

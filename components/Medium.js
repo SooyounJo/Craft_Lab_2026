@@ -6,11 +6,10 @@ export default function Medium() {
           <div className="slide__bg">
             <video
               className="slide__vid"
-              src="/assets/vid/mid vid.mp4"
+              src="/assets/vid/ex.mp4"
               muted
               loop
               playsInline
-              autoPlay
               preload="auto"
               aria-hidden="true"
             />

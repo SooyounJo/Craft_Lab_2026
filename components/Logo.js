@@ -1,67 +1,86 @@
-const LETTERS = [
-  {
-    ch: "C",
-    x: 0,
-    y: 0,
-    d: "M13.6632 7.75602C13.5687 7.04684 13.2933 6.51444 12.836 6.15985C12.3787 5.80526 11.7707 5.62797 11.0114 5.62797C9.88634 5.62797 9.02336 6.06329 8.42199 6.9329C7.82061 7.80303 7.52018 9.05841 7.52018 10.6985C7.52018 12.2834 7.81397 13.4836 8.40155 14.2981C8.98913 15.113 9.85364 15.5202 10.9951 15.5202C11.7211 15.5202 12.3072 15.347 12.7532 15.0006C13.1993 14.6542 13.4752 14.1514 13.5804 13.4918H15.451C15.3232 14.5612 14.8399 15.3997 14.0004 16.0067C13.1609 16.6136 12.1064 16.9171 10.8372 16.9171C9.20781 16.9171 7.94426 16.3658 7.04654 15.2627C6.14882 14.1601 5.69971 12.6442 5.69971 10.7154C5.69971 8.76462 6.16824 7.20166 7.10479 6.0265C8.04134 4.85185 9.3662 4.26427 11.0784 4.26427C12.2811 4.26427 13.2907 4.55397 14.1087 5.13287C14.9262 5.71227 15.3851 6.58649 15.4847 7.75551H13.6642L13.6632 7.75602Z",
-  },
-  {
-    ch: "R",
-    x: 19.72,
-    y: 0,
-    d: "M11.0146 4.44367C12.2838 4.44367 13.2454 4.73184 13.8994 5.30818C14.5534 5.88452 14.8804 6.62436 14.8804 7.5277C14.8804 8.25936 14.674 8.89088 14.2611 9.42328C13.8483 9.95516 13.2842 10.3159 12.5694 10.5039C13.1846 10.67 13.6378 10.9249 13.9285 11.2688C14.2192 11.6126 14.4175 12.3535 14.5227 13.4924C14.628 14.6313 14.8554 15.7134 15.2043 16.7389H13.3839C13.3118 16.5616 13.2398 16.2775 13.1677 15.8866C13.0957 15.4958 13.0124 14.9486 12.9184 14.2445L12.7687 13.1306C12.6742 12.3883 12.4529 11.8783 12.1035 11.6009C11.7545 11.324 11.0698 11.185 10.05 11.185H7.9884V16.7384H6.3007V4.44367H11.0146ZM10.6989 9.73904C11.6518 9.73904 12.2894 9.55919 12.6108 9.19897C12.9322 8.83876 13.0931 8.39527 13.0931 7.869C13.0931 7.215 12.9031 6.71888 12.5234 6.38115C12.1438 6.04291 11.5409 5.87379 10.7152 5.87379H7.9551V9.73955H10.6984L10.6989 9.73904Z",
-  },
-  {
-    ch: "A",
-    x: 39.38,
-    y: 0,
-    d: "M11.662 4.44364L16.6334 16.7389H14.7798L13.4498 13.5383H7.74669L6.41672 16.7389H4.66266L9.84153 4.44364H11.662ZM8.29543 12.1583H12.9424L10.6728 6.13127L8.29543 12.1583Z",
-  },
-  {
-    ch: "F",
-    x: 59.1,
-    y: 0,
-    d: "M14.3052 4.44367V5.89013H8.71858V9.72268H13.9807V11.1528H8.71858V16.7394H6.98958V4.44367H14.3052Z",
-  },
-  {
-    ch: "T",
-    x: 78.82,
-    y: 0,
-    d: "M15.6108 4.44367V5.89013H11.4876V16.7389H9.8081V5.89013H5.68482V4.44367H15.6108Z",
-  },
-  {
-    ch: "L",
-    x: 19.72,
-    y: 19.72,
-    d: "M8.94442 4.44314V15.2255H14.6639V16.7384H7.25679V4.44314H8.94442Z",
-  },
-  {
-    ch: "A",
-    x: 39.38,
-    y: 19.72,
-    d: "M11.662 4.44364L16.6334 16.7389H14.7798L13.4498 13.5383H7.74669L6.41672 16.7389H4.66266L9.84153 4.44364H11.662ZM8.29543 12.1583H12.9424L10.6728 6.13127L8.29543 12.1583Z",
-  },
-  {
-    ch: "B",
-    x: 59.1,
-    y: 19.72,
-    d: "M11.387 4.44314C12.4457 4.44314 13.2228 4.5816 13.7189 4.85904C14.215 5.13597 14.5916 5.50589 14.8496 5.9688C15.1071 6.43171 15.2359 6.95695 15.2359 7.54402C15.2359 8.2205 15.0709 8.78969 14.7413 9.2526C14.4113 9.71551 13.8834 10.0716 13.1574 10.321C14.0051 10.554 14.6258 10.9239 15.0198 11.4307C15.4132 11.9381 15.6099 12.5906 15.6099 13.3886C15.6099 14.3145 15.2926 15.1039 14.658 15.7579C14.0234 16.4119 13.0465 16.7389 11.7278 16.7389H6.881V4.44365L11.387 4.44314ZM10.9798 9.63938C11.8274 9.63938 12.4538 9.47179 12.8585 9.13661C13.2632 8.80144 13.4655 8.3232 13.4655 7.70241C13.4655 7.05965 13.2795 6.58857 12.9086 6.28916C12.5371 5.98975 11.9633 5.84004 11.1877 5.84004H8.5273V9.63938H10.9798ZM11.4953 15.3588C12.2045 15.3588 12.7757 15.1652 13.208 14.7769C13.6402 14.3891 13.8564 13.8735 13.8564 13.2308C13.8564 12.5992 13.6428 12.0863 13.2162 11.6928C12.7895 11.2994 12.227 11.1027 11.5285 11.1027H8.5273V15.3588H11.4953Z",
-  },
-];
+import { useEffect, useRef } from "react";
 
 export default function Logo({ href = "#hero" }) {
+  const vid = useRef(null);
+  const canvas = useRef(null);
+
+  useEffect(() => {
+    const v = vid.current;
+    const c = canvas.current;
+    if (!v || !c) return;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    let raf = 0;
+    let running = true;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const paint = () => {
+      raf = 0;
+      if (!running || !onScreen) return;
+      if (v.readyState >= 2) {
+        const scale = Math.min(c.width / v.videoWidth, c.height / v.videoHeight);
+        const dw = v.videoWidth * scale;
+        const dh = v.videoHeight * scale;
+        const dx = (c.width - dw) / 2;
+        const dy = (c.height - dh) / 2;
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.drawImage(v, dx, dy, dw, dh);
+        const img = ctx.getImageData(0, 0, c.width, c.height);
+        const d = img.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const a = Math.max(d[i], d[i + 1], d[i + 2]);
+          d[i] = 255;
+          d[i + 1] = 255;
+          d[i + 2] = 255;
+          d[i + 3] = a;
+        }
+        ctx.putImageData(img, 0, 0);
+      }
+      if (!reduce && onScreen) raf = requestAnimationFrame(paint);
+    };
+
+    let onScreen = false;
+    const watch = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        onScreen = entry.isIntersecting;
+        if (!onScreen) {
+          v.pause();
+          cancelAnimationFrame(raf);
+          raf = 0;
+          return;
+        }
+        if (!reduce) {
+          const pending = v.play();
+          if (pending && pending.catch) pending.catch(() => {});
+        }
+        if (!raf) paint();
+      });
+    }, { threshold: 0.2 });
+    watch.observe(c);
+
+    const start = () => {
+      if (reduce) {
+        v.pause();
+        try {
+          v.currentTime = 0;
+        } catch (e) {}
+      }
+      if (onScreen && !raf) paint();
+    };
+
+    v.addEventListener("loadeddata", start);
+    if (v.readyState >= 2) start();
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      watch.disconnect();
+      v.removeEventListener("loadeddata", start);
+    };
+  }, []);
+
   return (
     <a className="logo" href={href} aria-label="CRAFT Lab home">
-      <span className="logo-mark" aria-hidden="true">
-        {LETTERS.map((letter, index) => (
-          <span key={index} className="logo-ch" data-ch={letter.ch} style={{ left: letter.x, top: letter.y }}>
-            <svg viewBox="0 0 21.182 21.182">
-              <path className="logo-letter" d={letter.d} />
-              <text className="logo-gl" x="10.591" y="16.7" textAnchor="middle" />
-            </svg>
-          </span>
-        ))}
-      </span>
+      <video ref={vid} src="/assets/vid/craft-logo.mp4" muted loop playsInline preload="auto" />
+      <canvas ref={canvas} width={400} height={164} />
     </a>
   );
 }
