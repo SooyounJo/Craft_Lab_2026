@@ -1,14 +1,6 @@
 import { useEffect, useRef } from "react";
 import Logo from "@/components/Logo";
 
-const LOGO = [
-  "/assets/img-04.svg",
-  "/assets/img-05.svg",
-  "/assets/img-06.svg",
-  "/assets/img-07.svg",
-  "/assets/img-08.svg",
-];
-
 export default function Hero() {
   const vid = useRef(null);
 
@@ -65,18 +57,17 @@ export default function Hero() {
         </div>
 
         <header className="nav">
-          <div className="nav__links">
-            <a href="#research">
-              Cultural Robotics,<br />
-              Arts, Fabrication<br />
-              &amp; Technology
-            </a>
+          <div className="nav__brand">
+            <Logo />
+            <div className="nav__links">
+              <a href="#research">
+                Cultural Robotics,<br />
+                Arts, Fabrication<br />
+                &amp; Technology
+              </a>
+            </div>
           </div>
-          <Logo parts={LOGO} />
           <div className="nav__links nav__lang" role="group" aria-label="Language">
-            <button type="button" className="lang" data-lang="ko" aria-pressed="false">
-              KR
-            </button>
             <button type="button" className="lang" data-lang="en" aria-pressed="true">
               EN
             </button>

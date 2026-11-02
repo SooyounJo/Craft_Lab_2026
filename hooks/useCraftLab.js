@@ -46,7 +46,7 @@ function initCraftLab() {
   try {
     savedLang = localStorage.getItem("craftlab-lang");
   } catch (e) {}
-  if (savedLang === "ko") setLang("ko");
+  if (savedLang === "ko") setLang("en");
 
   document.querySelectorAll("[data-split]").forEach((el) => {
     const t = el.textContent;
@@ -71,19 +71,30 @@ function initCraftLab() {
     const CHARS = ".:";
     const SWAP = 70;
     const RADIUS = 100;
-    const groups = [...document.querySelectorAll(".tagline, .headline")];
-    const cells = groups.flatMap((g) => [...g.querySelectorAll(".ch")]);
+    const groups = [...document.querySelectorAll(".tagline, .headline, .logo-mark")];
+    const cells = [...document.querySelectorAll(".tagline .ch, .headline .ch")];
     const blank = (ch) => /\s/.test(ch);
     const pick = () => CHARS[Math.floor(Math.random() * CHARS.length)];
-    const items = cells.map((c) => ({
+    const hold = (it) => 250 + 1000 * (0.15 + DURATION * (0.75 * (it.idx / it.len) + 0.25 * Math.random()));
+    const textItems = cells.map((c) => ({
       cell: c,
       gl: c.lastChild,
       ch: c.firstChild.textContent,
       until: 0,
-      line: c.parentElement,
       idx: [...c.parentElement.children].indexOf(c),
       len: c.parentElement.children.length,
     }));
+    const logoItems = [...document.querySelectorAll(".logo-ch")].map((c, i) => ({
+      cell: c,
+      gl: c.querySelector(".logo-gl"),
+      letter: c.querySelector(".logo-letter"),
+      ch: c.dataset.ch,
+      until: 0,
+      idx: i % 8,
+      len: 8,
+      logo: true,
+    }));
+    const items = textItems.concat(logoItems);
     let lastSwap = 0;
     const frame = (now) => {
       scrambleRaf = 0;
@@ -94,11 +105,21 @@ function initCraftLab() {
         if (!it.until || blank(it.ch)) return;
         if (now >= it.until) {
           it.until = 0;
-          it.gl.textContent = it.ch;
+          if (it.logo) {
+            it.gl.textContent = "";
+            it.letter.style.opacity = "";
+          } else {
+            it.gl.textContent = it.ch;
+          }
           return;
         }
         busy = true;
-        if (swap || it.gl.textContent === it.ch) it.gl.textContent = pick();
+        if (it.logo) {
+          it.letter.style.opacity = "0";
+          if (swap || !it.gl.textContent) it.gl.textContent = ".";
+        } else if (swap || it.gl.textContent === it.ch) {
+          it.gl.textContent = pick();
+        }
       });
       if (busy) scrambleRaf = requestAnimationFrame(frame);
     };
@@ -108,24 +129,50 @@ function initCraftLab() {
     const scrambleFor = (it, ms) => {
       if (blank(it.ch)) return;
       it.until = Math.max(it.until, performance.now() + ms);
-      if (it.gl.textContent === it.ch) it.gl.textContent = pick();
+      if (it.logo) {
+        if (!it.gl.textContent) {
+          it.letter.style.opacity = "0";
+          it.gl.textContent = ".";
+        }
+      } else if (it.gl.textContent === it.ch) {
+        it.gl.textContent = pick();
+      }
     };
 
-    items.forEach((it) =>
-      scrambleFor(it, 250 + 1000 * (0.15 + DURATION * (0.75 * (it.idx / it.len) + 0.25 * Math.random())))
-    );
+    textItems.forEach((it) => scrambleFor(it, hold(it)));
     const go = () => wake();
     (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(go, go);
 
-    const headEl = document.querySelector(".headline");
+    const seenLogo = new WeakSet();
+    const playLogo = (mark) => {
+      logoItems.forEach((it) => {
+        if (mark.contains(it.cell)) scrambleFor(it, hold(it));
+      });
+      wake();
+    };
+    const logoIo = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || seenLogo.has(entry.target)) return;
+        seenLogo.add(entry.target);
+        playLogo(entry.target);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll(".logo-mark").forEach((mark) => logoIo.observe(mark));
+    cleanups.push(() => logoIo.disconnect());
+
     scrambleTimer = setInterval(() => {
       if (document.hidden) return;
-      const b = headEl.getBoundingClientRect();
-      if (b.bottom < 0 || b.top > innerHeight) return;
-      items.forEach((it) =>
-        scrambleFor(it, 1000 * (0.15 + DURATION * (0.75 * (it.idx / it.len) + 0.25 * Math.random())))
-      );
-      wake();
+      let any = false;
+      groups.forEach((g) => {
+        const b = g.getBoundingClientRect();
+        if (b.bottom < 0 || b.top > innerHeight || b.width === 0) return;
+        items.forEach((it) => {
+          if (!g.contains(it.cell)) return;
+          scrambleFor(it, hold(it) - 250);
+          any = true;
+        });
+      });
+      if (any) wake();
     }, 10000);
 
     let moveRaf = 0;
@@ -279,6 +326,21 @@ function initCraftLab() {
     }, 700);
     return true;
   }
+  function openResearch(index) {
+    const dir = index === researchIndex ? 0 : index > researchIndex ? 1 : -1;
+    if (!showResearch(index, dir)) return;
+    if (reduce) return;
+    animating = true;
+    clearTimeout(researchTimer);
+    researchTimer = setTimeout(() => {
+      animating = false;
+    }, 700);
+  }
+  on(researchPage, "click", (e) => {
+    const hit = e.target.closest("[data-axis]");
+    if (!hit || !researchPage.contains(hit)) return;
+    openResearch(Number(hit.dataset.axis));
+  });
 
   fit();
   syncResearchLayout();

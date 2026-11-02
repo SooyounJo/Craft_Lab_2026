@@ -1,13 +1,5 @@
 import Logo from "@/components/Logo";
 
-const LOGO = [
-  "/assets/img-18.svg",
-  "/assets/img-19.svg",
-  "/assets/img-20.svg",
-  "/assets/img-21.svg",
-  "/assets/img-22.svg",
-];
-
 export default function Join() {
   return (
     <section className="page" id="join" data-h="937.44" aria-label="Join">
@@ -57,9 +49,9 @@ export default function Join() {
         </form>
 
         <footer className="footer">
-          <Logo parts={LOGO} />
-          <span className="vline" style={{ left: 212.88 }} />
-          <span className="vline" style={{ left: 681.88 }} />
+          <Logo />
+          <span className="vline vline-a" />
+          <span className="vline vline-b" />
           <nav className="f-nav" aria-label="Footer">
             <p className="h">Explore</p>
             <a href="#research" data-axis="0">Arts · CR[a]</a>

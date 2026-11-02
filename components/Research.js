@@ -1,4 +1,5 @@
 function Axis({
+  index,
   open = false,
   delay,
   badge,
@@ -16,7 +17,7 @@ function Axis({
       style={{ "--d": delay }}
       aria-expanded={open}
     >
-      <div className="r-row" aria-hidden={open}>
+      <button type="button" className="r-row" data-axis={index} aria-hidden={open} aria-label={title}>
         <div className="badge">{badge}</div>
         <div className="r-text">
           <p className="k">{code}</p>
@@ -24,11 +25,13 @@ function Axis({
           <p className="d">{description}</p>
           <p className="t">{tags}</p>
         </div>
-      </div>
+      </button>
       <div className="r-card">
         <div className="r-card__c">
           <div className="r-card__top">
-            <div className="badge">{badge}</div>
+            <button type="button" className="badge" data-axis={index} aria-label={title}>
+              {badge}
+            </button>
             <div>
               <p className="k">{code}</p>
               <h3>{title}</h3>
@@ -64,6 +67,7 @@ export default function Research() {
 
           <div className="axes">
             <Axis
+              index={0}
               open
               delay={200}
               badge="01"
@@ -76,6 +80,7 @@ export default function Research() {
               alt="Dancers performing with robot arms"
             />
             <Axis
+              index={1}
               delay={320}
               badge="02"
               code="CR[f]"
@@ -87,6 +92,7 @@ export default function Research() {
               alt="Robotic fabrication surface study"
             />
             <Axis
+              index={2}
               delay={440}
               badge="03"
               code="CR[t]"
