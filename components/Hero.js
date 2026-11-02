@@ -13,7 +13,7 @@ export default function Hero() {
             src="/assets/vid/add.mp4"
             muted
             playsInline
-            preload="auto"
+            preload="none"
           />
         </div>
         <div className="hero-img" aria-hidden="true">
@@ -25,8 +25,7 @@ export default function Hero() {
               muted
               loop
               playsInline
-              autoPlay
-              preload="auto"
+              preload="none"
             />
           </div>
           <div className="g1" />

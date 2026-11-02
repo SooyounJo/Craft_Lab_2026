@@ -136,11 +136,11 @@ html[lang="ko"] .intro h2{letter-spacing:-1.5px}
 .tagline > span{display:block;overflow:hidden}
 .tagline span i{display:block;font-style:normal;transform:translateY(105%);transition:transform 1.1s var(--ease);transition-delay:calc(var(--d)*1ms)}
 .in .tagline span i{transform:none}
-.headline{font-weight:400;position:absolute;left:var(--hl,32px);top:calc(var(--hb) - var(--F,140)*1px);font-family:var(--fig);font-size:calc(var(--F,140)*1px);line-height:1;color:#fff;white-space:nowrap;
+.headline{font-weight:400;position:absolute;left:var(--hl,32px);top:calc(var(--hb) - var(--F,140)*1px);font-family:var(--fig);font-size:calc((1 - var(--t,0)) * var(--F,140) * 1px + var(--t,0) * 62.28px);line-height:1;color:#fff;white-space:nowrap;
   /* fades out and lifts away before the About text reaches it */
   transform-origin:0 0;opacity:.92;
-  /* --t 0→1: shrinks to 24% and settles at the top of the About screen, just above the divider */
-  transform:translate(calc(var(--t,0) * (80px - var(--hl,32px))),calc(var(--t,0) * (1354px - var(--hb) + var(--F,140)*1px))) scale(calc(1 - var(--t,0) * (1 - 62.28 / var(--F,140))))}
+  /* --t 0→1: arrives at x=80, y=64 in the About screen at 62.28px. */
+  transform:translate(calc(var(--t,0) * (80px - var(--hl,32px))),calc(var(--t,0) * (1354px - var(--hb) + var(--F,140)*1px)))}
 .seen .headline .ch{opacity:1;transform:none}
 .headline .ch,.tagline .ch{position:relative;display:inline-block;white-space:pre}
 /* ScrambledText intro (React Bits): the hidden sizer keeps each letter's width, the glyph on top scrambles */
@@ -157,6 +157,7 @@ html[lang="ko"] .intro h2{letter-spacing:-1.5px}
 .about__text{width:880px;font-size:35.556px;line-height:40.222px;color:#eeeeec}
 .about__text p + p{margin-top:40.222px;color:#e4e4e1}
 .about__label{width:150px;text-align:right;font-size:11.556px;line-height:17px;color:#969799}
+.about-break-desktop{display:none}
 
 /* ───────── Research ───────── */
 #research{background:var(--bg);min-height:100vh;height:max(100vh,calc(var(--h)*var(--s)*1px))}
@@ -187,8 +188,8 @@ button.badge:hover,button.r-row:hover .badge{background:#4a4a4a}
 .r-card__b{display:flex;flex-direction:column;gap:calc(20px * var(--cf,1));color:var(--mute)}
 .r-card__b .d{font-size:calc(16px * var(--cf,1));line-height:calc(24px * var(--cf,1))}
 .r-card__b .t{font-size:calc(12px * var(--cf,1));line-height:calc(20px * var(--cf,1))}
-.r-card__img{position:relative;flex:none;align-self:stretch;width:816px;height:100%;border-radius:20px;background:var(--card);
-  overflow:hidden;clip-path:inset(0 0 2px 0 round 20px);transform:translateZ(0)}
+.r-card__img{position:relative;left:0;flex:none;align-self:stretch;width:816px;height:100%;border-radius:20px;background:var(--card);
+  overflow:hidden;transform:translateZ(0)}
 .r-card__img img{position:absolute;left:-3%;top:-3%;width:106%;height:108%;max-width:none;object-fit:cover}
 .axes{position:relative;width:1380px;height:auto;display:flex;flex-direction:column;gap:0;padding-left:var(--c3)}
 .ax{position:relative;left:auto;top:auto;width:1266.222px;height:auto;outline:none}
@@ -301,6 +302,21 @@ button.badge:hover,button.r-row:hover .badge{background:#4a4a4a}
 .f-big span{display:block;overflow:hidden}
 .f-big span i{display:block;font-style:normal;transform:translateY(105%);transition:transform 1.2s var(--ease);transition-delay:calc(var(--d)*1ms)}
 .in .f-big span i{transform:none}
+
+/* Desktop layout accepted from the local editor, 2026-11-03.
+   These are source positions; new editor translations start at zero. */
+@media (min-width:861px){
+  #research > .stage,#work > .stage{left:calc(16px * var(--s))}
+  #medium > .stage{left:calc(5px * var(--s))}
+  /* The video's full three-row mark shares the adjacent text's visible top/bottom. */
+  .nav .logo{left:7px;width:140px;height:57.4px}
+  .about-break-desktop{display:block}
+  .divider{position:relative;top:18px}
+  .r-intro h2,.panel .intro h2,.panel .intro p{position:relative;left:-15.993px}
+  .r-intro > p{position:relative;left:-43.989px}
+  .r-card__top .badge,.r-card__top .k,.r-card__top h3,.r-card__b .d,.r-card__b .t{position:relative;left:-8px}
+  .slide .intro h2,.slide .intro p{position:relative;left:-5px}
+}
 
 /* missing-asset notice */
 .notice{position:fixed;left:16px;bottom:16px;z-index:60;max-width:340px;padding:12px 14px;border-radius:10px;background:rgba(20,20,22,.92);
@@ -434,7 +450,7 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   .nav__brand .nav__links{position:static;left:auto;top:auto}
   .nav__links:not(.nav__lang){width:auto}
   .nav__lang{width:auto;margin-left:0;gap:12px;flex:none}
-  .nav .logo{width:80px;height:33px;flex:none}
+  .nav .logo{top:1px;width:119px;height:48.8px;flex:none}
 
   .tagline{
     position:relative;left:auto;right:auto;top:auto;bottom:auto;
@@ -533,7 +549,7 @@ html[lang="ko"] .about__text p + p{margin-top:32px}
   .in .slide__bg img,.in .slide__bg .slide__vid{transform:none}
   .intro{position:relative;left:auto;top:auto;padding:28px 20px 0;gap:14px;flex:none}
   .intro h2,.intro p,.slide .intro h2,.slide .intro p,.panel .intro h2,.panel .intro p{left:auto}
-  .intro h2{font-size:28px;line-height:1.15;letter-spacing:-.04em;white-space:normal}
+  .intro h2{font-size:28px;line-height:1.15;letter-spacing:-1.5px;white-space:normal}
   .intro p{width:100%;font-size:14px;line-height:1.5}
   .slide .intro{left:auto;top:auto}
 

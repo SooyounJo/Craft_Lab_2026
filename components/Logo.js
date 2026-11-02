@@ -15,7 +15,7 @@ export default function Logo({ href = "#hero" }) {
 
     const paint = () => {
       raf = 0;
-      if (!running || !onScreen) return;
+      if (!running || !onScreen || document.hidden) return;
       if (v.readyState >= 2) {
         const scale = Math.min(c.width / v.videoWidth, c.height / v.videoHeight);
         const dw = v.videoWidth * scale;
@@ -39,20 +39,24 @@ export default function Logo({ href = "#hero" }) {
     };
 
     let onScreen = false;
+    const sync = () => {
+      if (!onScreen || document.hidden || !running) {
+        v.pause();
+        cancelAnimationFrame(raf);
+        raf = 0;
+        return;
+      }
+      if (!reduce) {
+        v.play()?.then(() => {
+          if (!onScreen || document.hidden || !running) v.pause();
+        }).catch(() => {});
+      }
+      if (!raf) paint();
+    };
     const watch = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         onScreen = entry.isIntersecting;
-        if (!onScreen) {
-          v.pause();
-          cancelAnimationFrame(raf);
-          raf = 0;
-          return;
-        }
-        if (!reduce) {
-          const pending = v.play();
-          if (pending && pending.catch) pending.catch(() => {});
-        }
-        if (!raf) paint();
+        sync();
       });
     }, { threshold: 0.2 });
     watch.observe(c);
@@ -68,11 +72,14 @@ export default function Logo({ href = "#hero" }) {
     };
 
     v.addEventListener("loadeddata", start);
+    document.addEventListener("visibilitychange", sync);
     if (v.readyState >= 2) start();
     return () => {
       running = false;
       cancelAnimationFrame(raf);
       watch.disconnect();
+      v.pause();
+      document.removeEventListener("visibilitychange", sync);
       v.removeEventListener("loadeddata", start);
     };
   }, []);
