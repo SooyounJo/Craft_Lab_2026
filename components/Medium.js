@@ -10,7 +10,7 @@ export default function Medium() {
               muted
               loop
               playsInline
-              preload="auto"
+              preload="none"
               aria-hidden="true"
             />
           </div>
